@@ -1,0 +1,28 @@
+{
+  "name": "edemy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "devd": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "antd": "^4.16.13",
+    "axios": "^0.21.4",
+    "bootstrap": "^5.1.1",
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^0.19.1",
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-toastify": "^8.0.3"
+  },
+  "devDependencies": { 
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2"
+  }
+}
