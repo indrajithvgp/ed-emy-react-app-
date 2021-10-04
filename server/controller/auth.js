@@ -35,16 +35,14 @@ export const login = async(req, res)=>{
     console.log(match)
     if(!match) return res.status(400).send("Invalid Credentials")
     const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET, {
-      expiresIn:'1m'
+      expiresIn:'77d'
     })
     user.password = undefined
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
     })
-    res.status(200).json({
-      user: user,
-    })
+    res.status(200).json(user)
 
   }catch(err){
     console.log(err)
@@ -62,4 +60,21 @@ export const logout = async(req, res) => {
   }catch(err) {
     console.log(err)
   } 
+}
+
+export const currentUser = async(req, res) => {
+  console.log(req.user)
+  try{
+    const user = await User.findById(req.user._id).select('-password').exec();
+    return res.json({ok:true})
+
+  }catch(err){
+
+  }
+}
+
+export const sendEmail = async(req, res)=>{
+  try {
+    
+  } catch (err) {}
 }

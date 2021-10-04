@@ -1,8 +1,9 @@
 import express from "express";
-import { register, login, logout } from "../controller/auth";
+import { register, login, logout, currentUser, sendEmail } from "../controller/auth";
 import User from "../models/user";
 import { comparePassword, hashPassword } from "../utils/auth";
 import jwt from "jsonwebtoken";
+import { requireSignIn } from "../middlewares";
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -34,5 +35,7 @@ router.post("/register", async (req, res) => {
 
 router.post('/login', login)
 router.get("/logout", logout);
+router.get("/current-user", requireSignIn, currentUser);
+router.get("/send-email", sendEmail);
 
 module.exports = router;

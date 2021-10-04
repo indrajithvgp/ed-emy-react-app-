@@ -27,12 +27,13 @@ const Login = () => {
         email,
         password,
       });
+      console.log(data)
       setLoading(false);
       dispatch({
         type: 'LOGIN',
         payload: data
       })
-      localStorage.setItem('user.login', JSON.stringify(data))
+      localStorage.setItem('user', JSON.stringify(data))
       toast.success("Login Successful. ");
       router.push("/")
 
