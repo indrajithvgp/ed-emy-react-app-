@@ -50,7 +50,6 @@ const Login = () => {
       <h1 className="jumbotron  bg-primary text-center square p-4">Login</h1>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
-
           <input
             type="email"
             className="form-control mb-4 p-4"
@@ -71,7 +70,7 @@ const Login = () => {
           <button
             type="submit"
             className="btn btn-block btn-primary"
-            disabled={ !password || !email || loading}
+            disabled={!password || !email || loading}
           >
             {loading ? <SyncOutlined spin /> : "Submit"}
           </button>
@@ -80,6 +79,11 @@ const Login = () => {
           New to Edemy ?{" "}
           <Link href="/register">
             <a>Register</a>
+          </Link>
+        </p>
+        <p className="text-center ">
+          <Link href="/forgot-password">
+            <a className="text-danger">Forgot Password ?</a>
           </Link>
         </p>
       </div>

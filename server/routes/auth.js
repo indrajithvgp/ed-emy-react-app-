@@ -1,5 +1,13 @@
 import express from "express";
-import { register, login, logout, currentUser, sendEmail } from "../controller/auth";
+import {
+  register,
+  login,
+  logout,
+  currentUser,
+  sendEmail,
+  resetPassword,
+  forgotPassword,
+} from "../controller/auth";
 import User from "../models/user";
 import { comparePassword, hashPassword } from "../utils/auth";
 import jwt from "jsonwebtoken";
@@ -37,5 +45,7 @@ router.post('/login', login)
 router.get("/logout", logout);
 router.get("/current-user", requireSignIn, currentUser);
 router.get("/send-email", sendEmail);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password",resetPassword);
 
 module.exports = router;

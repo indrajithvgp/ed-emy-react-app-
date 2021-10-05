@@ -2,6 +2,8 @@ import User from "../models/user";
 import jwt from "jsonwebtoken";
 import { comparePassword, hashPassword } from "../utils/auth";
 import AWS from "aws-sdk";
+import { nanoid } from "nanoid";
+
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -84,6 +86,7 @@ export const currentUser = async (req, res) => {
 };
 
 export const sendEmail = async (req, res) => {
+  console.log("sendEmail")
   try {
     const params = {
       Source: process.env.EMAIL_FROM,
@@ -110,9 +113,109 @@ export const sendEmail = async (req, res) => {
       },
     };
 
-    const emailSent = await SES.sendEmail(params).promise();
+    const emailSent = SES.sendEmail(params).promise();
     emailSent
       .then((data) => console.log(data))
       .catch((err) => console.log(err));
-  } catch (err) {}
+      res.status(200).json({ok:true})
+  } catch (err) {
+    console.log(err)
+  }
 };
+
+export const forgotPassword = async (req, res) => {
+  
+  try {
+    const { email } = req.body;
+    const shortCode = nanoid(6).toUpperCase();
+    const user = await User.findOneAndUpdate(
+      { email },
+      { passwordResetCode: shortCode }
+    ).exec();
+    console.log(user)
+    if(!user) return res.status(400).send("User not found")
+    const params = {
+      Source: process.env.EMAIL_FROM,
+      Destination: {
+        ToAddresses: ["jsdevutils@gmail.com"],
+      },
+      ReplyToAddresses: [process.env.EMAIL_FROM],
+      Message: {
+        Subject: {
+          Charset: "UTF-8",
+          Data: "Reset Password",
+        },
+        Body: {
+          Html: {
+            Charset: "UTF-8",
+            Data: `
+            <html>
+              <h1>Reset Password</h1>
+              <p>Use this code to reset your password</p>
+              <h2 style="color:red">${shortCode}</h2>
+              <i>edemy.com</i>
+            </html>
+            `,
+          },
+        },
+      },
+    };
+
+    const emailSent = SES.sendEmail(params).promise();
+    emailSent
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export const resetPassword = async (req, res)=>{
+ 
+  try {
+    const { email, code ,newPassword } = req.body;
+    const hashedPassword = await hashPassword(newPassword);
+    const user = await User.findOneAndUpdate(
+      { email, passwordResetCode: code },
+      { password: hashedPassword, passwordResetCode: "" }
+    ).exec();
+    return res.json({ok:true})
+    // if (!user) return res.status(400).send("User not found");
+    // const params = {
+    //   Source: process.env.EMAIL_FROM,
+    //   Destination: {
+    //     ToAddresses: ["jsdevutils@gmail.com"],
+    //   },
+    //   ReplyToAddresses: [process.env.EMAIL_FROM],
+    //   Message: {
+    //     Subject: {
+    //       Charset: "UTF-8",
+    //       Data: "Reset Password",
+    //     },
+    //     Body: {
+    //       Html: {
+    //         Charset: "UTF-8",
+    //         Data: `
+    //         <html>
+    //           <h1>Reset Password</h1>
+    //           <p>Use this code to reset your password</p>
+    //           <h2 style="color:red">${shortCode}</h2>
+    //           <i>edemy.com</i>
+    //         </html>
+    //         `,
+    //       },
+    //     },
+    //   },
+    // };
+
+    // const emailSent = SES.sendEmail(params).promise();
+    // emailSent
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.log(err));
+    // res.status(200).json({ ok: true });
+  } catch (err) {
+    res.status(400).json({ok:false})
+    console.log(err);
+  } 
+}
