@@ -35,7 +35,7 @@ const Login = () => {
       })
       localStorage.setItem('user', JSON.stringify(data))
       toast.success("Login Successful. ");
-      router.push("/")
+      router.push("/user")
 
       console.log(data);
     } catch (err) {

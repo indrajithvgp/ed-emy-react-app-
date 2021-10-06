@@ -10,6 +10,8 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   CoffeeOutlined,
+  TeamOutlined,
+  CarryOutlined,
 } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
@@ -49,7 +51,27 @@ const Topnav = () => {
             <a>App</a>
           </Link>
         </Item>
-
+        {user && user.role && user.role.includes("Instructor") ?(
+        <Item
+          key="/instructor/course/create"
+          onClick={(e) => setCurrent(e.key)}
+          icon={<CarryOutlined />}
+        >
+          <Link href="/instructor/course/create">
+            <a>Create Course</a>
+          </Link>
+        </Item>
+        ):(
+        <Item
+          key="/user/become-instructor"
+          onClick={(e) => setCurrent(e.key)}
+          icon={<TeamOutlined />}
+        >
+          <Link href="/user/become-instructor">
+            <a>Become a Instructor</a>
+          </Link>
+        </Item>
+        )}
         {user == null && (
           <>
             <Item
@@ -84,14 +106,16 @@ const Topnav = () => {
             title={user && user.name}
           >
             <Menu.ItemGroup>
-              <Item className="ms-auto" key="/user" >
+              <Item className="ms-auto" key="/user">
                 <Link href="/user">
                   <a>Dashboard</a>
                 </Link>
               </Item>
-              <Item key="/logout" 
-              // className="ms-auto" 
-              onClick={logout}>
+              <Item
+                key="/logout"
+                // className="ms-auto"
+                onClick={logout}
+              >
                 Logout
               </Item>
             </Menu.ItemGroup>
