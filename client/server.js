@@ -23,7 +23,7 @@ app.prepare().then(()=>{
             return handle(req, res)
         })
 
-        server.listen(3003, err=>{
+        server.listen(3000, err=>{
             if(err) throw err
             console.log('> Ready on')
         })

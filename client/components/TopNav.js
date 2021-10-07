@@ -51,7 +51,7 @@ const Topnav = () => {
             <a>App</a>
           </Link>
         </Item>
-        {user && user.role && user.role.includes("Instructor") ?(
+        {user && (user.role && user.role.includes("Instructor") ?(
         <Item
           key="/instructor/course/create"
           onClick={(e) => setCurrent(e.key)}
@@ -71,7 +71,7 @@ const Topnav = () => {
             <a>Become a Instructor</a>
           </Link>
         </Item>
-        )}
+        ))}
         {user == null && (
           <>
             <Item
