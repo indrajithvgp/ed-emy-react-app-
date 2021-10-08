@@ -1,4 +1,4 @@
-import {useContext, useEffect} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {
   SyncOutlined,
   
@@ -7,20 +7,35 @@ import {Context} from '../../context'
 import axios from 'axios'
 
 const StripeCallback = ()=>{
-    const {state:{user}} = useContext(Context);
+    const {state:{user}, dispatch} = useContext(Context);
+    const [error, setError] = useState("")
 
     useEffect(()=>{
         if(user){
-            axios.post('/api/get-account-status').then(res=>{
+            axios.post('/api/get-account-status', {user}).then(res=>{
                 console.log(res)
-                // window.href.location = "/instructor"
-            })
+                dispatch({
+                    type:"LOGIN",
+                    payload: res.data
+                })
+                window.localStorage.setItem("user", JSON.stringify(res.data))
+                window.location.href = "/instructor"
+            }).catch(err=> setError(err.message))
         }
     },[user])
 
     return (
-        <SyncOutlined spin className="d-flex justify-content-center display-1 text-danger p-5"/>
-    )
+      <>
+        {error ? (
+          <h1>Error..</h1>
+        ) : (
+          <SyncOutlined
+            spin
+            className="d-flex justify-content-center display-1 text-danger p-5"
+          />
+        )}
+      </>
+    );
 }
 
 export default StripeCallback

@@ -25,7 +25,7 @@ const BecomeInstructor = () => {
         window.location.href = res.data;
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.log(err.response);
         toast.error("Stripe onboarding failed. Try again");
         setLoading(false);
       });

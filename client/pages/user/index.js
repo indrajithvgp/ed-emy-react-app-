@@ -10,7 +10,7 @@ const UserIndex = () => {
 
   return (
       <UserRoute>
-        <h1 className="jumbotron text-center square">
+        <h1 className="jumbotron text-center square p-3">
           <pre>User Dashboard</pre>
         </h1>
       </UserRoute>

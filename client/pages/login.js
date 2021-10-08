@@ -16,6 +16,11 @@ const Login = () => {
 
   useEffect(()=>{
     if(state.user!==null) router.push('/')
+
+
+    return ()=>{
+      router.push("/user");
+    }
   }, [state.user])
 
   const handleSubmit = async (e) => {
@@ -34,8 +39,10 @@ const Login = () => {
         payload: data
       })
       localStorage.setItem('user', JSON.stringify(data))
+      
+      console.log("us")
       toast.success("Login Successful. ");
-      router.push("/user")
+      
 
       console.log(data);
     } catch (err) {

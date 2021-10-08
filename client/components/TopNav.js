@@ -41,7 +41,7 @@ const Topnav = () => {
   };
   return (
     <>
-      <Menu mode="horizontal" selected={[current]}>
+      <Menu mode="horizontal" selected={[current]} className="mb-2">
         <Item
           key="/"
           onClick={(e) => setCurrent(e.key)}
@@ -51,27 +51,28 @@ const Topnav = () => {
             <a>App</a>
           </Link>
         </Item>
-        {user && (user.role && user.role.includes("Instructor") ?(
-        <Item
-          key="/instructor/course/create"
-          onClick={(e) => setCurrent(e.key)}
-          icon={<CarryOutlined />}
-        >
-          <Link href="/instructor/course/create">
-            <a>Create Course</a>
-          </Link>
-        </Item>
-        ):(
-        <Item
-          key="/user/become-instructor"
-          onClick={(e) => setCurrent(e.key)}
-          icon={<TeamOutlined />}
-        >
-          <Link href="/user/become-instructor">
-            <a>Become a Instructor</a>
-          </Link>
-        </Item>
-        ))}
+        {user &&
+          (user.role && user.role.includes("Instructor") ? (
+            <Item
+              key="/instructor/course/create"
+              onClick={(e) => setCurrent(e.key)}
+              icon={<CarryOutlined />}
+            >
+              <Link href="/instructor/course/create">
+                <a>Create Course</a>
+              </Link>
+            </Item>
+          ) : (
+            <Item
+              key="/user/become-instructor"
+              onClick={(e) => setCurrent(e.key)}
+              icon={<TeamOutlined />}
+            >
+              <Link href="/user/become-instructor">
+                <a>Become a Instructor</a>
+              </Link>
+            </Item>
+          ))}
         {user == null && (
           <>
             <Item
@@ -99,6 +100,18 @@ const Topnav = () => {
             Logout
           </Item>
         )} */}
+        {user && user && user.role.includes("Instructor") && (
+          <Item
+            key="/instructor"
+            onClick={(e) => setCurrent(e.key)}
+            className="ms-auto"
+            icon={<CarryOutlined />}
+          >
+            <Link href="/instructor/course/create">
+              <a>Instructor</a>
+            </Link>
+          </Item>
+        )}
         {user && (
           <SubMenu
             icon={<CoffeeOutlined />}
