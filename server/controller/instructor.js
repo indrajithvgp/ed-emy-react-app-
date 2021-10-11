@@ -34,7 +34,7 @@ export const makeInstructor = async (req, res) => {
 
 export const getAccountStatus = async (req, res) => {
   try {
-    const user = await User.findById(req.body.user._id).exec();
+    const user = await User.findById(req.user._id).exec();
     const account = await stripe.accounts.retrieve(user.stripe_account_id);
     console.log("account", account);
     if (!account.charges_enabled) {
@@ -58,11 +58,12 @@ export const getAccountStatus = async (req, res) => {
 };
 
 export const currentInstructor = async (req, res) => {
-  try {
-    const user = await User.findById(req.body.user._id)
+
+  try { 
+    const user = await User.findById(req.user._id)
       .select("-password")
       .exec();
-    if (!user.includes("Instructor")) {
+    if (!user.role.includes("Instructor")) {
       return res.sendStatus(403);
     } else {
       return res.json({ ok: true });

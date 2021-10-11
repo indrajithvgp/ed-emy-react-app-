@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { SyncOutlined } from "@ant-design/icons";
+import { Context } from "../../context";
 import UserNav from "../nav/UserNav";
 
 const UserRoute = ({ children }) => {
   const router = useRouter();
   const [ok, setOk] = useState(false);
+  const {
+    state: { user },
+  } = useContext(Context);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log("user",user);
         const { data } = await axios.get("/api/current-user");
         if (data.ok) setOk(true);
-        console.log(data)
+        
       } catch (err) {
         setOk(false);
         router.push("/login");

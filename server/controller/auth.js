@@ -77,12 +77,13 @@ export const logout = async (req, res) => {
   }
 };
 
-export const currentUser = async (req, res) => {
-  console.log(req.user);
+export const currentUser = async (req, res) => { 
   try {
     const user = await User.findById(req.user._id).select("-password").exec();
-    return res.json({ ok: true });
-  } catch (err) {}
+    console.log(user)
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+  }
 };
 
 export const sendEmail = async (req, res) => {

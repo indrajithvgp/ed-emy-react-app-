@@ -4,11 +4,11 @@ import mongoose from "mongoose";
 const morgan = require("morgan");
 require("dotenv").config();
 import fs from "fs";
-import csrf from 'csurf'
+// import csrf from 'csurf'
 import cookieParser from 'cookie-parser';
-const csrfProtection = csrf({cookie:true})
+// const csrfProtection = csrf({cookie:true})
 const app = express();
-
+app.use(express.json());
 mongoose
   .connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
@@ -22,7 +22,7 @@ mongoose
   .catch((err) => console.log(err,"DB Connection Failed"));
 
 app.use(cors());
-app.use(express.json());
+
 app.use(morgan("dev"));
 app.use(cookieParser())
 // app.use(csrfProtection);

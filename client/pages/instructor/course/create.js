@@ -47,7 +47,8 @@ const CreateCourse = () => {
   };
   return (
     <InstructorRoute>
-      <h1 className="jumbotron text-center square">
+      <h1 className="jumbotron text-center square p-2">Create Course</h1>
+      <div className="pt-3 pb-3">
         <CreateCourseForm
           handleSubmit={handleSubmit}
           handleImage={handleImage}
@@ -57,8 +58,7 @@ const CreateCourse = () => {
           setValues={setValues}
           preview={preview}
         />
-      </h1>
-      <div className="pt-3 pb-3">{createForm()}</div>
+      </div>
     </InstructorRoute>
   );
 };

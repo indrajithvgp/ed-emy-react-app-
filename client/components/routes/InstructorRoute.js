@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import {Context} from '../../context'
 import { useRouter } from "next/router";
 import { SyncOutlined } from "@ant-design/icons";
 import UserNav from "../nav/UserNav";
@@ -7,21 +8,25 @@ import InstructorNav from "../nav/InstructorNav";
 
 const InstructorRoute = ({ children }) => {
   const router = useRouter();
+  const {
+    state: { user },
+  } = useContext(Context);
   const [ok, setOk] = useState(false);
 
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
+        
         const { data } = await axios.get("/api/current-instructor");
         if (data.ok) setOk(true);
-        console.log(data);
       } catch (err) {
+        console.log(err)
         setOk(false);
         router.push("/user");
       }
     };
     fetchInstructor();
-  }, []);
+  }, []); 
 
   return (
     <>
