@@ -14,7 +14,7 @@ const StripeCallback = ()=>{
         if(user){
             axios.post('/api/get-account-status', {user}).then(res=>{
                 console.log(res)
-                dispatch({
+                dispatch({ 
                     type:"LOGIN",
                     payload: res.data
                 })
