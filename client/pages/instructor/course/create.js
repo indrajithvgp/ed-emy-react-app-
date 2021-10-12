@@ -15,14 +15,26 @@ const CreateCourse = () => {
     imagePreview: "",
     category: "",
   });
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+  const handleRemove =async ()=>{
+     setValues({ ...values, loading: true });
+     const res = await axios.post("/api/course/remove-image", { image });
+     try {
+       setImage({});
+       setPreview("");
+       setValues({ ...values, loading: false });
+       setUploadButtonText("Upload Image");
+     } catch (err) {
+       setValues({ ...values, loading: false });
+       toast.error("Image Upload Failed, Please try again");
+     }
+  }
   const handleImage = (e) => {
     let file = e.target.files[0];
     setPreview(window.URL.createObjectURL(e.target.files[0]));
@@ -34,6 +46,7 @@ const CreateCourse = () => {
           image: uri,
         })
         console.log("Image data", data)
+        setImage(data)
         setValues({ ...values, loading: false });
       } catch (err) {
         setValues({ ...values, loading: false });
@@ -42,8 +55,9 @@ const CreateCourse = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    console.log(values)
   };
   return (
     <InstructorRoute>
@@ -57,6 +71,7 @@ const CreateCourse = () => {
           values={values}
           setValues={setValues}
           preview={preview}
+          handleRemove={handleRemove}
         />
       </div>
     </InstructorRoute>

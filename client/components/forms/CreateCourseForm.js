@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, Badge } from "react";
 import { Select, Button, Avatar } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 const { Option } = Select;
@@ -8,6 +8,7 @@ const CreateCourseForm = ({
   handleChange,
   handleImage,
   values,
+  handleRemove,
   uploadButtonText,
   setValues,
   preview,
@@ -96,6 +97,16 @@ const CreateCourseForm = ({
         </div>
         {preview && <Avatar width={200} src={preview} />}
       </div>
+
+                {preview && (
+                  <Badge count="X" onClick={handleRemove} className="pointer">
+                    <Avatar width={200} src={preview}>
+
+                    </Avatar> 
+                  </Badge>
+                )}
+
+
       <div className="row p-2">
         <div className="col">
           <Button
