@@ -1,5 +1,5 @@
 import expressJwt from 'express-jwt'
-
+import User from "../models/user";
 // function logCookies() {
 //   //only cookies created without this parameters may appear here
 //   //httpOnly: true,
@@ -31,3 +31,13 @@ export const requireSignIn = expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: ['HS256']
 })
+
+export const isInstructor = async (req, res, next) => {
+    try{
+        const user = await User.findById(req.user._id).exec()
+        if(!user.role.inclues['Instructor']) return res.sendStatus(403)
+        next()
+    }catch(err){
+        console.log(err)
+    }
+}

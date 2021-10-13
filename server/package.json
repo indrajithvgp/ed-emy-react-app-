@@ -27,6 +27,7 @@
     "nanoid": "^3.1.28",
     "nodemon": "^2.0.13",
     "query-string": "^7.0.1",
+    "slugify": "^1.6.1",
     "stripe": "^8.178.0"
   }
 }

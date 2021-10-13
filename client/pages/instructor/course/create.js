@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import CreateCourseForm from "../../../components/forms/CreateCourseForm";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
+import {useRouter} from "next/router";
 const CreateCourse = () => {
+  const router = useRouter()
   const [values, setValues] = useState({
     name: "",
     description: "",
@@ -22,19 +24,19 @@ const CreateCourse = () => {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  const handleRemove =async ()=>{
-     setValues({ ...values, loading: true });
-     const res = await axios.post("/api/course/remove-image", { image });
-     try {
-       setImage({});
-       setPreview("");
-       setValues({ ...values, loading: false });
-       setUploadButtonText("Upload Image");
-     } catch (err) {
-       setValues({ ...values, loading: false });
-       toast.error("Image Upload Failed, Please try again");
-     }
-  }
+  const handleRemove = async () => {
+    setValues({ ...values, loading: true });
+    const res = await axios.post("/api/course/remove-image", { image });
+    try {
+      setImage({});
+      setPreview("");
+      setValues({ ...values, loading: false });
+      setUploadButtonText("Upload Image");
+    } catch (err) {
+      setValues({ ...values, loading: false });
+      toast.error("Image Upload Failed, Please try again");
+    }
+  };
   const handleImage = (e) => {
     let file = e.target.files[0];
     setPreview(window.URL.createObjectURL(e.target.files[0]));
@@ -42,11 +44,11 @@ const CreateCourse = () => {
     setValues({ ...values, loading: true });
     Resizer.imageFileResizer(file, 720, 500, "JPEG", 100, 0, async (uri) => {
       try {
-        let {data} = await axios.post('/api/course/upload-image', {
+        let { data } = await axios.post("/api/course/upload-image", {
           image: uri,
-        })
-        console.log("Image data", data)
-        setImage(data)
+        });
+        console.log("Image data", data);
+        setImage(data);
         setValues({ ...values, loading: false });
       } catch (err) {
         setValues({ ...values, loading: false });
@@ -55,9 +57,20 @@ const CreateCourse = () => {
     });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values)
+
+    try {
+      const { data } = await axios.post("/api/course", {
+        ...values,
+        image,
+      });
+      toast.success('Great. Now you can start adding lessons')
+      router.push('/instructor')
+      console.log(data);
+    } catch (err) {
+      toast.error(err.response.data)
+    }
   };
   return (
     <InstructorRoute>

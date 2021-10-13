@@ -1,12 +1,14 @@
 import express from "express";
-import { uploadImage, removeImage } from "../controller/course";
+import { uploadImage, removeImage, create } from "../controller/course";
 
-import { requireSignIn } from "../middlewares";
+import { isInstructor, requireSignIn } from "../middlewares";
 const router = express.Router();
 
 
 router.post("/course/upload-image", uploadImage);
 router.post("/course/remove-image", removeImage);
 
+
+router.post("/course/", requireSignIn, isInstructor, create);
 
 module.exports = router;
