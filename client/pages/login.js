@@ -15,8 +15,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(()=>{
-    if(state.user!==null) router.push('/')
-
+    if(state.user!==null) {
+      router.push("/");
+    }
 
     return ()=>{
       router.push("/user");

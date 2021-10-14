@@ -13,10 +13,10 @@ const InstructorNav = () => {
           Dashboard
         </a>
       </Link>
-      <Link href="/intsructor/course/create">
+      <Link href="/instructor/course/create">
         <a
           className={`nav-link ${
-            current === "/intsructor/course/create" && "active"
+            current === "/instructor/course/create" && "active"
           }`}
         >
           Course Create

@@ -1,6 +1,5 @@
-
 import AWS from 'aws-sdk';
-import {nanoId} from 'nanoid'
+import { nanoid } from "nanoid";
 import Course from '../models/course'
 import slugify from 'slugify'
 
@@ -11,7 +10,7 @@ const awsConfig = {
   region: process.env.AWS_REGION,
   apiVersion: process.env.AWS_API_VERSION,
 };
-const S3 = AWS.S3(awsConfig)
+const S3 = new AWS.S3(awsConfig)
 export const uploadImage = async(req, res) =>{
     
     try{
@@ -29,12 +28,13 @@ export const uploadImage = async(req, res) =>{
           ContentEncoding: "base64",
           ContentType: `image/${type}`,
         };
-        s3.upload(params, (err, data) => {
+        S3.upload(params, (err, data) => {
             if(err){
                 console.log(err);
                 return res.sendStatus(400)
             }
-
+            console.log(data)
+            res.json(data)
 
         })
     }catch(err){
@@ -45,6 +45,7 @@ export const uploadImage = async(req, res) =>{
 export const removeImage = async (req, res) => {
     try{
         const { image } = req.body;
+        console.log(req.body)
         if (!image) return res.status(400).send("No Image");
 
         const params = {
@@ -52,7 +53,7 @@ export const removeImage = async (req, res) => {
           Key: image.Key,
         };
 
-        s3.deleteObject(params, (err, data) => {
+        S3.deleteObject(params, (err, data) => {
           if (err) {
             console.log(err);
             return res.sendStatus(400);
@@ -64,24 +65,37 @@ export const removeImage = async (req, res) => {
     }
 }
 
-
 export const create = async (req, res) => {
-
-  
-  try{
+  try {
     const alreadyExist = await Course.findOne({
       slug: slugify(req.body.name.toLowerCase()),
     });
-    if(alreadyExist) return res.status(400).send("Course with Title Already Exist")
+    if (alreadyExist)
+      return res.status(400).send("Course with Title Already Exist");
 
     const course = await new Course({
       slug: slugify(req.body.name.toLowerCase()),
       instructor: req.user._id,
-      ...req.body
+      title: req.body.name,
+      ...req.body,
     });
-    
+    course.save();
 
+    console.log(course);
+    res.json(course);
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const read = async (req, res) => {
 
+  console.log(req.body)
+  try{
+    const course = await Course.findOne({
+      slug: req.params.slug,
+    }).populate('instructor', "_id name").exec()
+    res.json(course)
+ 
 
   }catch(err){
     console.log(err)

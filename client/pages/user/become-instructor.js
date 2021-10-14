@@ -33,7 +33,7 @@ const BecomeInstructor = () => {
   return (
     <>
       <h1 className="jumbotron text-center square">Create Course</h1>
-      <div className="conatiner">
+      <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3 text-center">
             <UserSwitchOutlined className="display-1 pb-3" />
@@ -52,7 +52,7 @@ const BecomeInstructor = () => {
                 size="large"
                 onClick={becomeInstructor}
                 disabled={
-                  (user && user.role && user.role.includes("Instructor")) ||
+                  (user && user.role && !user.role.includes("Instructor")) ||
                   loading
                 }
                 icon={loading ? <LoadingOutlined /> : <SettingOutlined />}

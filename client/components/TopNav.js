@@ -11,19 +11,20 @@ import {
   LogoutOutlined,
   CoffeeOutlined,
   TeamOutlined,
-  CarryOutlined,
+  CarryOutOutlined,
+UserOutlined
 } from "@ant-design/icons";
 import { toast } from "react-toastify";
 
 const { Item, SubMenu } = Menu;
 
-const Topnav = () => {
+const TopNav = () => {
+  
   const [current, setCurrent] = useState("");
   const router = useRouter();
-
   const { state, dispatch } = useContext(Context);
   const { user } = state;
-  console.log("topnav");
+  console.log(user)
 
   useEffect(() => {
     process.browser && setCurrent(window.location.pathname);
@@ -39,6 +40,7 @@ const Topnav = () => {
     toast("Logged Out ..!");
     router.push("/login");
   };
+  
   return (
     <>
       <Menu mode="horizontal" selected={[current]} className="mb-2">
@@ -51,29 +53,28 @@ const Topnav = () => {
             <a>App</a>
           </Link>
         </Item>
-        {user &&
-          (user.role && user.role.includes("Instructor") ? (
-            <Item
-              key="/instructor/course/create"
-              onClick={(e) => setCurrent(e.key)}
-              icon={<CarryOutlined />}
-            >
-              <Link href="/instructor/course/create">
-                <a>Create Course</a>
-              </Link>
-            </Item>
-          ) : (
-            <Item
-              key="/user/become-instructor"
-              onClick={(e) => setCurrent(e.key)}
-              icon={<TeamOutlined />}
-            >
-              <Link href="/user/become-instructor">
-                <a>Become a Instructor</a>
-              </Link>
-            </Item>
-          ))}
-        {user == null && (
+        {user && user.role.includes("Instructor") ? (
+          <Item
+            key="/instructor/course/create"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<CarryOutOutlined />}
+          >
+            <Link href="/instructor/course/create">
+              <a>Create Course</a>
+            </Link>
+          </Item>
+        ) : (
+          <Item
+            key="/user/become-instructor"
+            onClick={(e) => setCurrent(e.key)}
+            icon={<UserOutlined />}
+          >
+            <Link href="/user/become-instructor">
+              <a>Become a Instructor</a>
+            </Link>
+          </Item>
+        )}
+        {user === null && (
           <>
             <Item
               key="/login"
@@ -95,48 +96,45 @@ const Topnav = () => {
             </Item>
           </>
         )}
-        {/* {user && (
-          <Item className="ms-auto" onClick={logout} icon={<LogoutOutlined />}>
-            Logout
-          </Item>
-        )} */}
-        {user && user && user.role.includes("Instructor") && (
-          <Item
-            key="/instructor"
-            onClick={(e) => setCurrent(e.key)}
-            className="ms-auto"
-            icon={<CarryOutlined />}
-          >
-            <Link href="/instructor/course/create">
-              <a>Instructor</a>
-            </Link>
-          </Item>
+
+        {user && user.role.includes("Instructor") && (
+          <>
+            <Item
+              key="/instructor"
+              onClick={(e) => setCurrent(e.key)}
+              className="ms-auto"
+              icon={<UserOutlined />}
+              // icon={<CarryOutlined />}
+            >
+              <Link href="/instructor/course/create">
+                <a>Instructor</a>
+              </Link>
+            </Item>
+          </>
         )}
         {user && (
-          <SubMenu
-            icon={<CoffeeOutlined />}
-            className="ms-auto"
-            title={user && user.name}
-          >
-            <Menu.ItemGroup>
-              <Item className="ms-auto" key="/user">
-                <Link href="/user">
-                  <a>Dashboard</a>
-                </Link>
-              </Item>
-              <Item
-                key="/logout"
-                // className="ms-auto"
-                onClick={logout}
-              >
-                Logout
-              </Item>
-            </Menu.ItemGroup>
-          </SubMenu>
+          <>
+            <SubMenu
+              icon={<CoffeeOutlined />}
+              className="ms-auto"
+              title={user && user.name}
+            >
+              <Menu.ItemGroup>
+                <Item className="ms-auto" key="/user">
+                  <Link href="/user">
+                    <a>Dashboard</a>
+                  </Link>
+                </Item>
+                <Item key="/logout" onClick={logout}>
+                  Logout
+                </Item>
+              </Menu.ItemGroup>
+            </SubMenu>
+          </>
         )}
       </Menu>
     </>
   );
 };
 
-export default Topnav;
+export default TopNav;

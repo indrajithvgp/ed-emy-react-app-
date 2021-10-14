@@ -1,5 +1,5 @@
-import { useState, useContext, useEffect, Badge } from "react";
-import { Select, Button, Avatar } from "antd";
+import { useState, useContext, useEffect  } from "react";
+import { Select, Button, Avatar,Badge } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
@@ -47,7 +47,7 @@ const CreateCourseForm = ({
             style={{ width: "100%" }}
             size="large"
             value={values.paid}
-            onChange={(e) => setValues({ ...values, paid: v, price:0 })}
+            onChange={(v) => setValues({ ...values, paid: v, price:0 })}
           >
             <Option value={true}>Paid</Option>
             <Option value={false}>Free</Option>
@@ -95,14 +95,12 @@ const CreateCourseForm = ({
             </label>
           </div>
         </div>
-        {preview && <Avatar width={200} src={preview} />}
+        {/* {preview && <Avatar width={200} src={preview} />} */}
       </div>
 
                 {preview && (
                   <Badge count="X" onClick={handleRemove} className="pointer">
-                    <Avatar width={200} src={preview}>
-
-                    </Avatar> 
+                    <Avatar width={200} src={preview}/>
                   </Badge>
                 )}
 

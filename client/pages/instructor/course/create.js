@@ -51,6 +51,7 @@ const CreateCourse = () => {
         setImage(data);
         setValues({ ...values, loading: false });
       } catch (err) {
+        console.log(err)
         setValues({ ...values, loading: false });
         toast.error("Image Upload Failed, Please try again");
       }
@@ -63,7 +64,7 @@ const CreateCourse = () => {
     try {
       const { data } = await axios.post("/api/course", {
         ...values,
-        image,
+        image: image,
       });
       toast.success('Great. Now you can start adding lessons')
       router.push('/instructor')
@@ -80,7 +81,7 @@ const CreateCourse = () => {
           handleSubmit={handleSubmit}
           handleImage={handleImage}
           handleChange={handleChange}
-          uploadButtonText={uploadButtonText}
+          uploadButtonText={uploadButtonText} 
           values={values}
           setValues={setValues}
           preview={preview}
