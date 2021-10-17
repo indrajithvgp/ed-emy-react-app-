@@ -17,7 +17,7 @@ export const uploadImage = async(req, res) =>{
         const {image} = req.body;
         if(!image) return res.status(400).send("No Image")
         const base64Data = new Buffer.from(
-          image.replace(/^data:image\/w+;base64,/, ""), "base64"
+          image.replace(/^data:image\/\w+;base64,/, ""), "base64"
         );
         const type = image.split(';')[0].split('/')[1]
         const params = {

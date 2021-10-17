@@ -98,7 +98,7 @@ const TopNav = () => {
         )}
 
         {user && user.role.includes("Instructor") && (
-          <>
+          
             <Item
               key="/instructor"
               onClick={(e) => setCurrent(e.key)}
@@ -110,10 +110,10 @@ const TopNav = () => {
                 <a>Instructor</a>
               </Link>
             </Item>
-          </>
+         
         )}
         {user && (
-          <>
+          
             <SubMenu
               icon={<CoffeeOutlined />}
               className="ms-auto"
@@ -130,7 +130,7 @@ const TopNav = () => {
                 </Item>
               </Menu.ItemGroup>
             </SubMenu>
-          </>
+          
         )}
       </Menu>
     </>

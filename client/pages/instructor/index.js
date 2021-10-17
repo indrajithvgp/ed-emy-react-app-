@@ -27,17 +27,17 @@ const InstructorIndex = () => {
       {courses &&
         courses.map((course) => (
           <>
-            <div className="media pl-2">
+            <div className="media">
               <Avatar
-                size={50}
+                size={80}
                 src={course.image ? course.image.Location : "/course.png"}
               />
-              <div className="media-body pl-2">
+              <div className="media-body md-3 pl-2">
                 <div className="row">
                   <div className="col">
                     <Link
                       className="pointer"
-                      href={`/course/view/${course.slug}`}
+                      href={`/instructor/course/view/${course.slug}`}
                     >
                       <a className="mt-2 text-primary">
                         <h5 className="pt-2">{course.title}</h5>
