@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import { Avatar, Tooltip, Button, Modal } from "antd";
@@ -13,11 +14,13 @@ const CourseView = () => {
   const [course, setCourse] = useState({});
   const [visible, setVisible] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [uploadButtonText, setUploadButtonText] = useState("Upload Video");
   const [values, setValues] = useState({
-    title:"",
-    content:"",
-    video:""
-  })
+    title: "",
+    content: "",
+    video: {},
+  });
 
   useEffect(() => {
     loadCourse();
@@ -27,9 +30,44 @@ const CourseView = () => {
     const { data } = await axios.get(`/api/course/${slug}`);
     setCourse(data);
   };
-  const handleLesson=(e)=>{
-    e.preventDefault()
+  const handleRemoveVideo = async(e)=>{
+    setUploading(true);
+    try{
+      const {data}=await axios.post('/api/course/remove-video', values.video)
+      setValues({...values, video:{}})
+      setUploadButtonText("Upload Another Video")
+      setUploading(false);
+    }catch(err){
+       console.log(err);
+       setUploading(false);
+       toast.error("Video remove Failed");
+    }
   }
+  const handleLesson = (e) => {
+    e.preventDefault();
+  };
+  const handlevideo = async(e) => {
+    setUploading(true);
+    try {
+      const file = e.target.files[0];
+      setUploadButtonText(file.name);
+      let videoData = new FormData();
+      videoData.append("video", file);
+      
+      const { data } = await axios.post("/api/course/video-upload", videoData, {
+        onUploadProgress: (e) => {
+          setProgress(Math.round((100 * e.loaded)/e.total));
+        },
+      });
+      console.log(videoData);
+      setValues({...values, video: data})
+      setUploading(false)
+    } catch (err) {
+      console.log(err);
+      setUploading(false);
+      toast.error("Video Upload Failed");
+    }
+  };
   return (
     <InstructorRoute>
       <div className="container-fluid pt-3">
@@ -103,6 +141,12 @@ const CourseView = () => {
                 uploading={uploading}
                 setUploading={setUploading}
                 values={values}
+                progress={progress}
+                setProgress={setProgress}
+                uploadButtonText={uploadButtonText}
+                handlevideo={handlevideo}
+                handleRemoveVideo={handleRemoveVideo}
+                setUploadButtonText={setUploadButtonText}
                 setValues={setValues}
               />
             </Modal>
