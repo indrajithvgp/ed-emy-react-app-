@@ -15,7 +15,7 @@ const lessonSchema = new Schema(
     content: {
       type: {},
     },
-    video_link: {},
+    video: {},
     free_preview: {
       type: Boolean,
       default: false,

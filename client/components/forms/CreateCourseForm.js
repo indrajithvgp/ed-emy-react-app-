@@ -3,7 +3,7 @@ import { Select, Button, Avatar,Badge } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-const CreateCourseForm = ({
+const CreateCourseForm = ({ 
   handleSubmit,
   handleChange,
   handleImage,

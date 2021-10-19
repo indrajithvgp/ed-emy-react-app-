@@ -4,6 +4,7 @@ import {
   removeImage,
   create,
   read,
+  addLesson,
   removeVideo,
   uploadVideo,
 } from "../controller/course";
@@ -18,6 +19,7 @@ router.post("/course/remove-image", removeImage);
 
 router.post("/course", requireSignIn, isInstructor, create);
 router.get('/course/:slug', read)
-router.post("/course/video-upload", requireSignIn, formidable(), uploadVideo);
-router.post("/course/remove-video", requireSignIn, removeVideo);
+router.post("/course/video-upload/:intsructorId", requireSignIn, formidable(), uploadVideo);
+router.post("/course/remove-video/:intsructorId", requireSignIn, removeVideo);
+router.post("/course/lesson/:slug/:intsructorId", requireSignIn, addLesson);
 module.exports = router; 
