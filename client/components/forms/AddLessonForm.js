@@ -17,7 +17,7 @@ const AddLessonForm = ({
 }) => {
   return (
     <div className="container pt-3">
-      <form onSubmit={() => handleLesson()} className="">
+      <form onSubmit={handleLesson} className="">
         <input
           className="form-control square"
           type="text"
@@ -56,7 +56,7 @@ const AddLessonForm = ({
           />
         )}
         <Button
-          onClick={() => handleLesson()}
+          onClick={handleLesson}
           className="col-mt-3"
           size="large"
           type="primary"

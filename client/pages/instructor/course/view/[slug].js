@@ -3,11 +3,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
-import { Avatar, Tooltip, Button, Modal, List } from "antd";
+import { Avatar, Tooltip, Card, Button, Modal, Item, Meta, List } from "antd";
 import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
+
 const CourseView = () => {
   const router = useRouter();
   const { slug } = router.query;
@@ -53,13 +54,13 @@ const CourseView = () => {
         `/api/course/lesson/${slug}/${course.instructor._id}`,
         values
       );
-      setValues({...values, title:"", content:"", video:{}})
-      setVisible(false)
-      setUploadButtonText('Upload Video')
-      setCourse(data)
-      toast('Lesson Added')
+      setValues({ ...values, title: "", content: "", video: {} });
+      setVisible(false);
+      setUploadButtonText("Upload Video");
+      setCourse(data);
+      toast("Lesson Added");
     } catch (err) {
-      console.log(err)
+      console.log(err);
       toast("Lesson Add Failed");
     }
   };
@@ -119,7 +120,12 @@ const CourseView = () => {
 
                   <div className="d-flex pt-2">
                     <Tooltip title="edit">
-                      <EditOutlined className="h5 pointer text-warning mr-4" />
+                      <EditOutlined
+                        onClick={() =>
+                          router.push(`/instructor/course/edit/${slug}`)
+                        }
+                        className="h5 pointer text-warning mr-4"
+                      />
                     </Tooltip>
                     <Tooltip title="publish">
                       <CheckOutlined className="h5 pointer text-danger mr-4" />
@@ -173,16 +179,22 @@ const CourseView = () => {
             </Modal>
             <div className="row pb-5">
               <div className="col lesson-list">
-                <h4>{course && course.lessons && course.lessons.length} Lessons</h4>
-                <List itemLayout="horizontal" dataSource={course && course.lessons} renderItem={(item, index)=>{
-                  <Item>
-                    <Item.Meta title={item.title} avatar={<Avatar>{index+1}</Avatar>}>
-
-                    </Item.Meta>
-                  </Item>
-                }}>
-
-                </List>
+                <h4>
+                  {course && course.lessons && course.lessons.length} Lessons
+                </h4>
+                <List
+                  itemLayout="horizontal"
+                  dataSource={course && course.lessons}
+                  
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        title={item.title}
+                        avatar={<Avatar>{index + 1}</Avatar>}
+                      ></List.Item.Meta>
+                    </List.Item>
+                  )}
+                ></List>
               </div>
             </div>
           </div>

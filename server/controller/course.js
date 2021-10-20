@@ -161,9 +161,9 @@ export const addLesson = async (req, res) => {
   try {
     const { slug, instructorId } = req.params;
     const { title, content, video } = req.body;
-    if (req.user._id != req.params.instructorId) {
-      return res.status(401).send("Unauthorized");
-    }
+    // if (req.user._id != req.params.instructorId) {
+    //   return res.status(401).send("Unauthorized");
+    // }
     const updated = await Course.findOneAndUpdate(
       { slug },
       {
@@ -171,11 +171,28 @@ export const addLesson = async (req, res) => {
       },
       { new: true }
     )
-      .populate("intructor", "_id name")
+      .populate("instructor", "_id name")
       .exec();
     res.json(updated);
   } catch (err) {
     console.log(err);
     return res.status(400).send("Add Lesson Failed");
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const course = await Course.findOne({ slug: slug }).exec();
+    if (course.instructor != req.user._id) {
+      return res.status(402).send("Unauthorized");
+    }
+    const updated = await Course.findOneAndUpdate({ slug }, req.body, {
+      new: true,
+    }).exec();
+    res.json(updated);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send(err.message)
   }
 };

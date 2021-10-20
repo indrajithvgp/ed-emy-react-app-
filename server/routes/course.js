@@ -4,6 +4,7 @@ import {
   removeImage,
   create,
   read,
+  update,
   addLesson,
   removeVideo,
   uploadVideo,
@@ -18,6 +19,7 @@ router.post("/course/remove-image", removeImage);
 
 
 router.post("/course", requireSignIn, isInstructor, create);
+router.put("/course/:slug", requireSignIn, update);
 router.get('/course/:slug', read)
 router.post("/course/video-upload/:intsructorId", requireSignIn, formidable(), uploadVideo);
 router.post("/course/remove-video/:intsructorId", requireSignIn, removeVideo);
