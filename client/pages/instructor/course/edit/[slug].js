@@ -2,7 +2,9 @@ import axios from "axios";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import { Avatar, Tooltip, Card, Button, Modal, Item, Meta, List } from "antd";
 import { useEffect, useState } from "react";
+import { DeleteOutlined } from "@ant-design/icons";
 import CreateCourseForm from "../../../../components/forms/CreateCourseForm";
+import UpdateLessonForm from "../../../../components/forms/UpdateLessonForm";
 import Resizer from "react-image-file-resizer";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
@@ -22,7 +24,12 @@ const EditCourse = () => {
   });
   const [image, setImage] = useState({});
   const [preview, setPreview] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState({});
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
+  const [uploadVideoText, setUploadVideoText] = useState("Upload Video");
+  const [progress, setProgress] = useState(false);
+  const [uploading, setUpload] = useState(false)
   useEffect(() => {
     loadCourse();
   }, [slug]);
@@ -68,14 +75,14 @@ const EditCourse = () => {
     });
   };
   const handleDrag = (e, index) => {
-    e.dataTransfer.setData('itemIndex', index)
+    e.dataTransfer.setData("itemIndex", index);
     console.log("a");
   };
-  const handleDrop = async(e, index) => {
+  const handleDrop = async (e, index) => {
     console.log("b");
-    const moving = e.dataTransfer.getData('itemIndex')
-    const target = index
-    let allLessons = values.lessons
+    const moving = e.dataTransfer.getData("itemIndex");
+    const target = index;
+    let allLessons = values.lessons;
     let movingItem = allLessons[moving];
     allLessons.splice(moving, 1);
     allLessons.splice(target, 0, movingItem);
@@ -85,6 +92,15 @@ const EditCourse = () => {
       image: image,
     });
     toast.success("All Set..");
+  };
+
+  const handleDelete = async (index, item) => {
+    const answer = window.confirm("Are you sure you want to delete?");
+    if (!answer) return;
+    let allLessons = values.lessons;
+    let removed = allLessons.splice(index, 1);
+    setValues({ ...values, lessons: allLessons });
+    const { data } = await axios.put(`/api/course/${slug}/${removed._id}`);
   };
 
   const handleSubmit = async (e) => {
@@ -103,6 +119,11 @@ const EditCourse = () => {
       toast.error(err.response.data);
     }
   };
+
+  const handleVideo = ()=>{
+
+  }
+  const handleUpdateLesson = () => {};
   return (
     <InstructorRoute>
       <h1 className="jumbotron text-center square p-2">Update Course</h1>
@@ -134,14 +155,39 @@ const EditCourse = () => {
                 onDrop={(e) => handleDrop(e, index)}
               >
                 <List.Item.Meta
+                  onClick={() => {
+                    setVisible(true);
+                    setCurrent(item);
+                  }}
                   title={item.title}
                   avatar={<Avatar>{index + 1}</Avatar>}
                 ></List.Item.Meta>
+                <DeleteOutlined
+                  className="text-danger ms-auto"
+                  onClick={() => handleDelete(index)}
+                />
               </List.Item>
             )}
           ></List>
         </div>
       </div>
+      <Modal
+        center
+        visible={visible}
+        footer={null}
+        onCancel={() => setVisible(false)}
+        title="Update Lesson"
+      >
+        <UpdateLessonForm
+          current={current}
+          setCurrent={setCurrent}
+          handleUpdateLesson={handleUpdateLesson}
+          handleVideo={handleVideo}
+          uploadVideoText={uploadVideoText}
+          progress={progress}
+          uploading={uploading}
+        />
+      </Modal>
     </InstructorRoute>
   );
 };

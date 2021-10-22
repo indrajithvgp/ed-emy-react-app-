@@ -7,6 +7,7 @@ import {
   update,
   addLesson,
   removeVideo,
+  removeLesson,
   uploadVideo,
 } from "../controller/course";
  import formidable from 'express-formidable'
@@ -24,4 +25,5 @@ router.get('/course/:slug', read)
 router.post("/course/video-upload/:intsructorId", requireSignIn, formidable(), uploadVideo);
 router.post("/course/remove-video/:intsructorId", requireSignIn, removeVideo);
 router.post("/course/lesson/:slug/:intsructorId", requireSignIn, addLesson);
+router.put("/course/:slug/:lessonId", requireSignIn, removeLesson);
 module.exports = router; 
