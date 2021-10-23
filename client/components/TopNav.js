@@ -106,7 +106,7 @@ const TopNav = () => {
               icon={<UserOutlined />}
               // icon={<CarryOutlined />}
             >
-              <Link href="/instructor/course/create">
+              <Link href="/instructor">
                 <a>Instructor</a>
               </Link>
             </Item>

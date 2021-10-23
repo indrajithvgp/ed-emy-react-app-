@@ -103,9 +103,9 @@ export const read = async (req, res) => {
 
 export const uploadVideo = async (req, res) => {
   try {
-    if (req.user._id != req.params.instructorId) {
-      return res.status(401).send("Unauthorized");
-    }
+    // if (req.user._id != req.params.instructorId) {
+    //   return res.status(401).send("Unauthorized");
+    // }
     const { video } = req.files;
     if (!video) return res.status(400).send("No Video");
 
@@ -137,6 +137,7 @@ export const removeVideo = async (req, res) => {
       return res.status(401).send("Unauthorized");
     }
     const { Bucket, Key } = req.body;
+    console.log(Bucket, Key)
     if (!Bucket || !Key) return res.status(400).send("No Video");
 
     const params = {
@@ -211,5 +212,32 @@ export const removeLesson = async(req, res, next) => {
   } catch (err) {
     console.log(err);
     res.status(400).send(err.message);
+  }
+}
+
+export const updateLesson = async(req, res)=>{
+  try{
+    const {slug} = req.params
+  const {_id, title, content, video, free_preview} = req.body
+  const course = await Course.findOne({slug: slug}).select('instructor').exec()
+  // if(course.instructor_id != req.user._id){
+  //   return res.status(400).send('Unauthorized')
+  // }
+  const updated = await Course.updateOne(
+    { "lessons.id": _id },
+    {
+      $set: {
+        "lessons.$.title": title,
+        "lessons.$.content": content,
+        "lessons.$.video": video,
+        "lessons.$.free_preview": free_preview,
+      },
+    },{new: true}
+  ).exec();
+  console.log(updated);
+  res.json({ok:true})
+  }catch(err){
+    console.log(err)
+    res.status(400).send("Update Failed")
   }
 }

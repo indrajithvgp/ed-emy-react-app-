@@ -29,7 +29,7 @@ const EditCourse = () => {
   const [uploadButtonText, setUploadButtonText] = useState("Upload Image");
   const [uploadVideoText, setUploadVideoText] = useState("Upload Video");
   const [progress, setProgress] = useState(false);
-  const [uploading, setUpload] = useState(false)
+  const [uploading, setUploading] = useState(false);
   useEffect(() => {
     loadCourse();
   }, [slug]);
@@ -99,8 +99,9 @@ const EditCourse = () => {
     if (!answer) return;
     let allLessons = values.lessons;
     let removed = allLessons.splice(index, 1);
+    console.log(removed);
     setValues({ ...values, lessons: allLessons });
-    const { data } = await axios.put(`/api/course/${slug}/${removed._id}`);
+    const { data } = await axios.put(`/api/course/${slug}/${removed[0]._id}`);
   };
 
   const handleSubmit = async (e) => {
@@ -119,11 +120,49 @@ const EditCourse = () => {
       toast.error(err.response.data);
     }
   };
+  const handleVideo = async (e) => {
+    if (current.video && current.video.Location) {
+      const { data } = await axios.post(
+        `/api/course/remove-video/${values.instructor._id}`,
+        current.video
+      );
+    }
+    const video = e.target.files[0];
+    console.log(video)
+    setUploadVideoText(video.name);
+    setUploading(true);
+    const videoData = new FormData();
+    videoData.append("video", video);
+    videoData.append("courseId", values._id);
+    const { data } = await axios.post(
+      `/api/course/video-upload/${values.instructor._id}`,
+      videoData,
+      {
+        onUploadProgress: (e) => Math.round((100 * e.loaded) / e.total),
+      }
+    );
+    console.log(data);
+    setCurrent({ ...current, video: data });
+    setUploading(false);
+  };
 
-  const handleVideo = ()=>{
-
-  }
-  const handleUpdateLesson = () => {};
+  const handleUpdateLesson = async (e) => {
+    e.preventDefault();
+    const { data } = await axios.put(
+      `/api/course/lesson/${slug}/${current._id}`,
+      current
+    );
+    setUploadVideoText("Upload Video");
+    setVisible(false);
+    
+    if(data.ok){
+      let arr = values.lessons
+      const index = arr.findIndex((el)=>el._id===current._id)
+      arr[index] = current
+      setValues({...values, lessons: arr})
+      toast("Lesson updated successfully")
+    }
+  };
   return (
     <InstructorRoute>
       <h1 className="jumbotron text-center square p-2">Update Course</h1>

@@ -6,7 +6,7 @@ import ReactPlayer from "react-player";
 
 const UpdateLessonForm = ({
   handleUpdateLesson,
-  setValues,
+  setCurrent,
   current,
   progress,
   handleVideo,
@@ -19,7 +19,7 @@ const UpdateLessonForm = ({
         <input
           className="form-control square"
           type="text"
-          onChange={(e) => setValues({ ...current, title: e.target.value })}
+          onChange={(e) => setCurrent({ ...current, title: e.target.value })}
           value={current.title}
           placeholder="Title"
           autoFocus
@@ -29,7 +29,7 @@ const UpdateLessonForm = ({
           className="form-control mt-3"
           col="7"
           rows="7"
-          onChange={(e) => setValues({ ...current, content: e.target.value })}
+          onChange={(e) => setCurrent({ ...current, content: e.target.value })}
           value={current.content}
           placeholder="Content"
         />
@@ -60,7 +60,7 @@ const UpdateLessonForm = ({
           <span className="pt-3 badge">Preview</span>
           {/* {float-right} */}
           <Switch
-            className="ms-auto mt-2"
+            className=" mt-2"
             disabled={uploading}
             defaultChecked={current.free_preview}
             name="free_preview"
