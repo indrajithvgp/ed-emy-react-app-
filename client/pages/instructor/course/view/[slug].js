@@ -4,7 +4,13 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import InstructorRoute from "../../../../components/routes/InstructorRoute";
 import { Avatar, Tooltip, Card, Button, Modal, Item, Meta, List } from "antd";
-import { CheckOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  EditOutlined,
+  UploadOutlined,
+  CloseOutlined,
+  QuestionOutlined,
+} from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import AddLessonForm from "../../../../components/forms/AddLessonForm";
@@ -64,6 +70,31 @@ const CourseView = () => {
       toast("Lesson Add Failed");
     }
   };
+  const handlePublish= async(e, courseId)=>{
+    try{
+let answer = window.confirm('Once you publish course, users can enroll for course in marketplace ?')
+    if(!answer) return
+    const {data} = await axios.put(`/api/course/publish/${courseId}`)
+    setCourse(data)
+    toast.success("Your Course is live");
+    }catch(err){
+      toast.error("Course has not published")
+    }
+  }
+  const handleUnpublish= async(e, courseId)=>{
+    try{
+      let answer = window.confirm(
+        "Once you Unpublish the course, course will no longer be in marketplace. Sure you want to unpublish ?"
+      );
+      if (!answer) return;
+      const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
+      setCourse(data);
+      toast.success("Your Course is Unpublished");
+    }catch(err){
+      toast.error("Course has not unpublished");
+    }
+      
+  }
   const handlevideo = async (e) => {
     setUploading(true);
     try {
@@ -127,9 +158,25 @@ const CourseView = () => {
                         className="h5 pointer text-warning mr-4"
                       />
                     </Tooltip>
-                    <Tooltip title="publish">
-                      <CheckOutlined className="h5 pointer text-danger mr-4" />
-                    </Tooltip>
+                    {course.lessons && course.lessons.length < 5 ? (
+                      <Tooltip title="Min 5 Lessons required to publish">
+                        <QuestionOutlined className="h5 pointer text-danger" />
+                      </Tooltip>
+                    ) : course.published ? (
+                      <Tooltip title="Unpublish">
+                        <CloseOutlined
+                          onChange={(e) => handleUnpublish(e, course._id)}
+                          className="h5 pointer text-danger"
+                        />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="publish">
+                        <CheckOutlined
+                          onChange={(e) => handlePublish(e, course._id)}
+                          className="h5 pointer text-success mr-4"
+                        />
+                      </Tooltip>
+                    )}
                   </div>
                 </div>
               </div>
@@ -185,7 +232,6 @@ const CourseView = () => {
                 <List
                   itemLayout="horizontal"
                   dataSource={course && course.lessons}
-                  
                   renderItem={(item, index) => (
                     <List.Item>
                       <List.Item.Meta

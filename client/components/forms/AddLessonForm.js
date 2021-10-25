@@ -22,7 +22,7 @@ const AddLessonForm = ({
           className="form-control square"
           type="text"
           onChange={(e) => setValues({ ...values, title: e.target.value })}
-          values={values.title}
+          value={values.title}
           placeholder="Title"
           autoFocus
           required
@@ -32,7 +32,7 @@ const AddLessonForm = ({
           col="7"
           rows="7"
           onChange={(e) => setValues({ ...values, content: e.target.value })}
-          values={values.content}
+          value={values.content}
           placeholder="Content"
         />
         <div className="d-flex justify-content-center">
