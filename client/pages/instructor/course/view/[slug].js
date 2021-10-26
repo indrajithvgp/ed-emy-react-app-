@@ -165,14 +165,14 @@ let answer = window.confirm('Once you publish course, users can enroll for cours
                     ) : course.published ? (
                       <Tooltip title="Unpublish">
                         <CloseOutlined
-                          onChange={(e) => handleUnpublish(e, course._id)}
+                          onClick={(e) => handleUnpublish(e, course._id)}
                           className="h5 pointer text-danger"
                         />
                       </Tooltip>
                     ) : (
                       <Tooltip title="publish">
                         <CheckOutlined
-                          onChange={(e) => handlePublish(e, course._id)}
+                          onClick={(e) => handlePublish(e, course._id)}
                           className="h5 pointer text-success mr-4"
                         />
                       </Tooltip>

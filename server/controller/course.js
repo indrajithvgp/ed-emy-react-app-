@@ -242,13 +242,18 @@ export const updateLesson = async(req, res)=>{
   }
 }
 export const publish = async (req, res) => {
+
+const {courseId} = req.params
+    const course = await Course.findById(courseId).select("instructor").exec()
+  console.log(course)
   try{
     const {courseId} = req.params
     const course = await Course.findById(courseId).select("instructor").exec()
-    if(course.instructor._id!=req.user._id){
-      return res.status(400).send("Unauthorized")
+    
+    // if(course.instructor._id!=req.user._id){
+    //   return res.status(400).send("Unauthorized")
 
-    }
+    // }
     const updated = await Course.findByIdAndUpdate(courseId, {published: true}, {new:true}).exec()
     res.json(updated)
   }catch(err){
@@ -260,9 +265,9 @@ export const unpublish = async (req, res) => {
   try {
     const { courseId } = req.params;
     const course = await Course.findById(courseId).select("instructor").exec();
-    if (course.instructor._id != req.user._id) {
-      return res.status(400).send("Unauthorized");
-    }
+    // if (course.instructor._id != req.user._id) {
+    //   return res.status(400).send("Unauthorized");
+    // }
     const updated = await Course.findByIdAndUpdate(
       courseId,
       { published: false },

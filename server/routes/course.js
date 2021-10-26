@@ -27,8 +27,8 @@ router.post("/course", requireSignIn, isInstructor, create);
 router.put("/course/:slug", requireSignIn, update);
 router.get('/course/:slug', read)
 
-router.put("/course/publish/:courseid", publish);
-router.put("/course/unpublish/:courseid", unpublish);
+router.put("/course/publish/:courseId", publish);
+router.put("/course/unpublish/:courseId", unpublish);
 
 router.post("/course/video-upload/:intsructorId", requireSignIn, formidable(), uploadVideo);
 router.post("/course/remove-video/:intsructorId", removeVideo);
