@@ -9,25 +9,71 @@ import SingleCourseJumbotronCard from "../../components/cards/SingleCourseJumbot
 import SingleCourseComponent from "../../components/cards/SingleCourseComponent";
 import PreviewModal from "../../components/modal/PreviewModal";
 
-const SingleCourse = ({course}) => {
-  console.log("course", course)
-  return <>
-        He
+const SingleCourse = ({ course }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [preview, setPreview] = useState(false);
+  // const router = useRouter();
+  // const { slug } = router.query;
+  const {
+    title,
+    description,
+    updatedAt,
+    createdAt,
+    instructor,
+    lessons,
+    image,
+    price,
+    paid,
+    category,
+  } = course;
+  return (
+    <>
+      <SingleCourseJumbotronCard
+        name={title}
+        image={image}
+        // video={video}
+        paid={paid}
+        category={category}
+        setPreview={setPreview}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        lessons={lessons}
+        price={price}
+        preview={preview}
+        description={description}
+        updatedAt={updatedAt}
+        createdAt={createdAt}
+        instructor={instructor}
+      />
+    {/* <pre>
+      {JSON.stringify(course, null, 4)}
+    </pre> */}
+      {showModal && (
+        <PreviewModal
+          preview={preview}
+          showModal={showModal}
+          setShowModal={setShowModal}
+        />
+      )}
+
+      {course.lessons && (
+        <SingleCourseComponent
+          lessons={course.lessons}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          setPreview={setPreview}
+        />
+      )}
     </>
-  ;
+  );
 };
 
-// //context - req,res, query, params
-export async function getServideSideProps(context) {
-  console.log(context);
- 
-  const { data } = await axios.get(
-    `http://localhost:3000/api/course/${context.query.slug}`
-  );
-  console.log("data", data), query;
+export async function getServerSideProps({ query }) {
+  const res = await axios.get(`http://localhost:3000/api/course/${query.slug}`);
+  // console.log(res.data.title);
   return {
     props: {
-      course: {name:"a"},
+      course: res.data,
     },
   };
 }

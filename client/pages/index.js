@@ -42,6 +42,6 @@ export async function getServerSideProps() {
       courses: data,
     },
   };
-}
+} 
 
 export default Home

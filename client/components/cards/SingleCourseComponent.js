@@ -1,4 +1,4 @@
-import { List } from 'antd'
+import { List, Badge, Avatar } from 'antd'
 import React from 'react'
 
 const SingleCourseComponent = ({
@@ -8,7 +8,7 @@ const SingleCourseComponent = ({
   lessons,
 }) => {
   return (
-    <div className="container">
+    <div className="container p-3">
       <div className="row">
         <div className="col lesson-list">
           {lessons && <h4>{lessons.length} Lessons</h4>}

@@ -86,15 +86,17 @@ export const create = async (req, res) => {
     console.log(err);
   }
 };
-export const read = async (req, res) => {
-  console.log(req.body);
+export const read = async (req, res,next) => {
+  
   try {
     const course = await Course.findOne({
       slug: req.params.slug,
     })
       .populate("instructor", "_id name")
       .exec();
-    res.json(course);
+      // console.log(course);
+    res.status(201).json(course);
+    next()
   } catch (err) {
     console.log(err);
     return res.send(400).json("Course Creation Failed. Try Again");

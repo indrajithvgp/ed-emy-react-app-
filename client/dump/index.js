@@ -72,7 +72,7 @@ export async function getServideSideProps({ req, query }) {
   const { data } = await axios.get(
     `http://localhost:3000/api/course/${query.slug}`
   );
-  console.log(data);
+  console.log(data); 
   return {
     props: {
       course: data,
