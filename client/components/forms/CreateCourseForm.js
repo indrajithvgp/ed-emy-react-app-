@@ -9,6 +9,7 @@ const CreateCourseForm = ({
   handleImage,
   values,
   handleRemove,
+  setPreview,
   editPage = false,
   uploadButtonText,
   setValues,

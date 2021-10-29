@@ -85,6 +85,7 @@ const CreateCourse = () => {
           values={values}
           setValues={setValues}
           preview={preview}
+          setPreview={setPreview}
           handleRemove={handleRemove}
         />
       </div>

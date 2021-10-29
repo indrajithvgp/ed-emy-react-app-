@@ -224,7 +224,7 @@ const EditCourse = () => {
           handleVideo={handleVideo}
           uploadVideoText={uploadVideoText}
           progress={progress}
-          uploading={uploading}
+          uploading={uploading} 
         />
       </Modal>
     </InstructorRoute>

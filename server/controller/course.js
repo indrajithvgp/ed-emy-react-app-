@@ -67,13 +67,13 @@ export const removeImage = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const alreadyExist = await Course.findOne({
-      slug: slugify(req.body.name.toLowerCase()),
+      slug: slugify(req.body.title.toLowerCase()),
     });
-    if (alreadyExist)
-      return res.status(400).send("Course with Title Already Exist");
-
+    // console.log(alreadyExist);
+    if (alreadyExist) return res.status(400).send("Course with Title Already Exist");
+    
     const course = await new Course({
-      slug: slugify(req.body.name.toLowerCase()),
+      slug: slugify(req.body.title.toLowerCase()),
       instructor: req.user._id,
       title: req.body.name,
       ...req.body,
