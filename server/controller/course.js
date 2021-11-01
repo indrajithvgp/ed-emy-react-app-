@@ -286,3 +286,18 @@ export const courses = async (req, res) => {
   const all = await Course.find({published: true}).populate("instructor", "_id name").exec()
   res.json(all)
 }
+
+export const checkEnrollment = async (req, res) => {
+  const {courseId} = req.params
+
+  const user = await User.findById(req.user._id).exec()
+  let ids = []
+  let length = user.courses && user.courses.length;
+  for(let i=0; i<length; i++){
+    ids.push(user.courses[i].toString())
+  }
+  // if(ids.includes(courseId)){
+
+  // }
+  res.json({status: id.includes(courseId), course: await Course.findById(courseId).exec()})
+}

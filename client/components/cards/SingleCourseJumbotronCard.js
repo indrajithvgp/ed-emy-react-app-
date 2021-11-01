@@ -1,13 +1,20 @@
-import React from 'react'
-import { List, Badge } from "antd";
+import React from "react";
+import { List, Badge, Button } from "antd";
+import { LoadingOutlined, SafetyOutlined } from "@ant-design/icons";
 import ReactPlayer from "react-player";
-import {currencyFormatter} from '../../utils/helpers'
+import { currencyFormatter } from "../../utils/helpers";
 const SingleCourseJumbotronCard = ({
   name,
   description,
   instructor,
   price,
   category,
+  loading,
+  enrolled,
+  setEnrolled,
+  handlePaidEnrollment,
+  handleFreeEnrollment,
+  user,
   paid,
   updatedAt,
   setPreview,
@@ -40,7 +47,7 @@ const SingleCourseJumbotronCard = ({
               : "Free"}
           </h4>
         </div>
-        
+
         <div className="col-md-4">
           {lessons[0].video && lessons[0].video.Location ? (
             <div
@@ -66,10 +73,28 @@ const SingleCourseJumbotronCard = ({
               />
             </>
           )}
+          {loading ? (
+            <div className="d-flex justify-content-center">
+              <LoadingOutlined className="h1 text-danger" />
+            </div>
+          ) : (
+            <Button
+              className="mb-3 mt-3"
+              type="danger"
+              block
+              shape="round"
+              icon={<SafetyOutlined />}
+              size="large"
+              disabled={loading}
+              onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
+            >
+              {user ? enrolled.status ? 'Go to Course': "Enroll" : "Login to Enroll"}
+            </Button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default SingleCourseJumbotronCard
+export default SingleCourseJumbotronCard;

@@ -10,6 +10,7 @@ import {
   addLesson,
   removeVideo,
   removeLesson,
+  checkEnrollment,
   updateLesson,
   courses,
   uploadVideo,
@@ -26,7 +27,7 @@ router.post("/course/remove-image", removeImage);
 router.post("/course", requireSignIn, isInstructor, create);
 router.put("/course/:slug", requireSignIn, update);
 router.get('/course/:slug', read)
-
+router.get('/check-enrollment/:courseId', checkEnrollment)
 router.put("/course/publish/:courseId", publish);
 router.put("/course/unpublish/:courseId", unpublish);
 
