@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { currencyFormatter } from "../../utils/helpers";
 import { Badge, Button } from "antd";
@@ -17,10 +18,27 @@ const SingleCourse = ({ course }) => {
   const [preview, setPreview] = useState(false);
   const [loading, setLoading] = useState(false);
   const [enrolled, setEnrolled] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   // const { slug } = router.query;
-  const handlePaidEnrollment = () => {};
-  const handleFreeEnrollment = () => {};
+  const handlePaidEnrollment = () => {
+    console.log("a")
+  };
+  const handleFreeEnrollment = async(e) => {
+    e.preventDefault();
+    try{
+      if(!user) router.push("/login");
+      if(enrolled.status) return router.push(`/user/course/${enrolled.course.slug}`);
+
+      setLoading(true);
+      const {data} = await axios.post(`/api/free-enrollment/${course._id}`);
+      toast.success(data.message);
+      setLoading(false);
+      router.push(`/user/course/${data.course.slug}`)
+    }catch(err){
+      toast.error("Enrollment Failed, Please try again");
+      setLoading(false);
+    }
+  };
 
   async function checkEnrollment() {
     const {data} = await axios.get(`/api/check-enrollment/${course._id}`);

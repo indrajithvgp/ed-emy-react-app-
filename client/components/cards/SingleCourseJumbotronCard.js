@@ -61,13 +61,13 @@ const SingleCourseJumbotronCard = ({
                 url={lessons[0].video.Location}
                 width="100%"
                 height="225px"
-                light={image.Location}
+                light={image && image.Location}
               />
             </div>
           ) : (
             <>
               <img
-                src={image.Location}
+                src={image&&image.Location}
                 className="img img-fluid"
                 alt="course"
               />
@@ -88,7 +88,11 @@ const SingleCourseJumbotronCard = ({
               disabled={loading}
               onClick={paid ? handlePaidEnrollment : handleFreeEnrollment}
             >
-              {user ? enrolled.status ? 'Go to Course': "Enroll" : "Login to Enroll"}
+              {user
+                ? enrolled.status
+                  ? "Go to Course"
+                  : "Enroll"
+                : "Login to Enroll"}
             </Button>
           )}
         </div>

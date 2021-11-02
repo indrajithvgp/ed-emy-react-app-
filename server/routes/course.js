@@ -5,6 +5,7 @@ import {
   create,
   unpublish,
   publish,
+  freeEnrollment,
   read,
   update,
   addLesson,
@@ -27,7 +28,9 @@ router.post("/course/remove-image", removeImage);
 router.post("/course", requireSignIn, isInstructor, create);
 router.put("/course/:slug", requireSignIn, update);
 router.get('/course/:slug', read)
-router.get('/check-enrollment/:courseId', checkEnrollment)
+// router.get('/check-enrollment/:courseId',requireSignIn, checkEnrollment)
+router.get("/check-enrollment/:courseId",requireSignIn, checkEnrollment);
+router.post("/free-enrollment/:courseId",requireSignIn, freeEnrollment);
 router.put("/course/publish/:courseId", publish);
 router.put("/course/unpublish/:courseId", unpublish);
 
