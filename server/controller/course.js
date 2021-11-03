@@ -4,6 +4,7 @@ import Course from "../models/course";
 import User from "../models/user";
 import slugify from "slugify";
 import fs from "fs";
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const awsConfig = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -317,13 +318,15 @@ export const checkEnrollment = async (req, res) => {
 export const freeEnrollment = async (req, res) => {
   try {
     const course = await Course.findById(req.params.courseId).exec();
+
     if (course.paid) return;
+
     const result = await User.findByIdAndUpdate(
       req.user._id,
       {
         $addToSet: { courses: course._id },
       },
-      { new: true } 
+      { new: true }
     ).exec();
     res.json({
       message: "Congratulations! You have successfully enrolled",
@@ -332,5 +335,62 @@ export const freeEnrollment = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).send("Free Enrollment Error");
+  }
+};
+
+export const paidEnrollment = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.courseId)
+      .populate("instructor")
+      .exec();
+
+    if (!course.paid) return;
+    const fee = (course.price * 30) / 100;
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          name: course.title,
+          amount: Math.round(course.price.toFixed(2) * 100),
+          currency: "usd",
+          quantity: 1,
+        },
+      ],
+      payment_intent_data: {
+        application_fee_amount: Math.round(fee.toFixed(2) * 100),
+        transfer_data: {
+          // course.instructor.stripe_account,
+          destination: course.instructor.stripe_account_id,
+        },
+      },
+      success_url: `${process.env.SUCCESS_URL}/${course._id}`,
+      cancel_url: `${process.env.CANCEL_URL}`,
+
+    });
+
+    await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        stripeSession: session,
+      },
+      { new: true }
+    ).exec();
+
+    res.send(session.id);
+
+    // const result = await User.findByIdAndUpdate(
+    //   req.user._id,
+    //   {
+    //     $addToSet: { courses: course._id },
+    //   },
+    //   { new: true }
+    // ).exec();
+    // res.json({
+    //   message: "Congratulations! You have successfully enrolled",
+    //   course,
+    // });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Paid Enrollment Error");
   }
 };

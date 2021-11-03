@@ -10,6 +10,7 @@ import SingleCourseJumbotronCard from "../../components/cards/SingleCourseJumbot
 import SingleCourseComponent from "../../components/cards/SingleCourseComponent";
 import PreviewModal from "../../components/modal/PreviewModal";
 import { Context } from "../../context/index";
+import {loadStripe} from '@stripe/stripe-js';
 const SingleCourse = ({ course }) => {
   const {
     state: { user },
@@ -21,7 +22,24 @@ const SingleCourse = ({ course }) => {
   const router = useRouter();
   // const { slug } = router.query;
   const handlePaidEnrollment = () => {
-    console.log("a")
+    try {
+      if (!user) router.push("/login");
+      if (enrolled.status)
+        return router.push(`/user/course/${enrolled.course.slug}`);
+
+      setLoading(true);
+      const { data } = await axios.post(`/api/paid-enrollment/${course._id}`);
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
+      stripe.redirectToCheckout({sessionId: data});
+      
+
+      toast.success(data.message);
+      setLoading(false);
+      router.push(`/user/course/${data.course.slug}`);
+    } catch (err) {
+      toast.error("Enrollment Failed, Please try again");
+      setLoading(false);
+    }
   };
   const handleFreeEnrollment = async(e) => {
     e.preventDefault();

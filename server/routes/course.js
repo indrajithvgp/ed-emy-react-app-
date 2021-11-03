@@ -5,6 +5,7 @@ import {
   create,
   unpublish,
   publish,
+  paidEnrollment,
   freeEnrollment,
   read,
   update,
@@ -31,6 +32,7 @@ router.get('/course/:slug', read)
 // router.get('/check-enrollment/:courseId',requireSignIn, checkEnrollment)
 router.get("/check-enrollment/:courseId",requireSignIn, checkEnrollment);
 router.post("/free-enrollment/:courseId",requireSignIn, freeEnrollment);
+router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
 router.put("/course/publish/:courseId", publish);
 router.put("/course/unpublish/:courseId", unpublish);
 
