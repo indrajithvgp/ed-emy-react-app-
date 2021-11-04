@@ -21,18 +21,15 @@ const SingleCourse = ({ course }) => {
   const [enrolled, setEnrolled] = useState(false);
   const router = useRouter();
   // const { slug } = router.query;
-  const handlePaidEnrollment = () => {
+  const handlePaidEnrollment = async() => {
     try {
       if (!user) router.push("/login");
       if (enrolled.status)
         return router.push(`/user/course/${enrolled.course.slug}`);
-
       setLoading(true);
       const { data } = await axios.post(`/api/paid-enrollment/${course._id}`);
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY);
       stripe.redirectToCheckout({sessionId: data});
-      
-
       toast.success(data.message);
       setLoading(false);
       router.push(`/user/course/${data.course.slug}`);

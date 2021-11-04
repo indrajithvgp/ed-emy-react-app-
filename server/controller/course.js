@@ -363,9 +363,8 @@ export const paidEnrollment = async (req, res) => {
           destination: course.instructor.stripe_account_id,
         },
       },
-      success_url: `${process.env.SUCCESS_URL}/${course._id}`,
-      cancel_url: `${process.env.CANCEL_URL}`,
-
+      success_url: `${process.env.STRIPE_SUCESS_URL}/${course._id}`,
+      cancel_url: `${process.env.STRIPE_CANCEL_URL}`,
     });
 
     await User.findByIdAndUpdate(
@@ -394,3 +393,32 @@ export const paidEnrollment = async (req, res) => {
     res.status(400).send("Paid Enrollment Error");
   }
 };
+
+export const stripeSuccess = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId).exec();
+    const user = await User.findById(req.user._id).exec();
+    if(!user.stripeSession.id) return res.sendStatus(400)
+
+
+    const session = await stripe.checkout.sessions.retrieve(user.stripeSession.id);
+    if(session.payment_status==="paid") {
+      await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $addToSet: { courses: course._id },
+          // $set: { stripeSession: "" }
+          $unset: { stripeSession: {} },
+        },
+        { new: true }
+      ).exec();
+      // res.redirect(`${process.env.SUCCESS_URL}/${courseId}`);
+    }
+
+    res.json({ success: true, course });
+  } catch (err) {
+    console.log(err);
+    res.json({success: false});
+  }
+}

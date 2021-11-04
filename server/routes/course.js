@@ -5,6 +5,7 @@ import {
   create,
   unpublish,
   publish,
+  stripeSuccess,
   paidEnrollment,
   freeEnrollment,
   read,
@@ -33,6 +34,7 @@ router.get('/course/:slug', read)
 router.get("/check-enrollment/:courseId",requireSignIn, checkEnrollment);
 router.post("/free-enrollment/:courseId",requireSignIn, freeEnrollment);
 router.post("/paid-enrollment/:courseId", requireSignIn, paidEnrollment);
+router.get("/stripe-success/:courseId", requireSignIn, stripeSuccess);
 router.put("/course/publish/:courseId", publish);
 router.put("/course/unpublish/:courseId", unpublish);
 

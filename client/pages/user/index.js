@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from "../../context";
 import axios from "axios";
 import UserRoute from "../../components/routes/UserRoute";
@@ -7,6 +7,16 @@ const UserIndex = () => {
   const {
     state: { user },
   } = useContext(Context); 
+
+  const [courses, setCourses] = useState([]);
+  useEffect(() => {
+    loadCourse();
+  }, []);
+  async function loadCourse() {
+    const { data } = await axios.get(`/api/courses`);
+    // console.log(data);
+    setCourses(data)
+  }
 
   return (
       <UserRoute>
