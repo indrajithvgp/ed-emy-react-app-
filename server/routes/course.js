@@ -8,6 +8,7 @@ import {
   stripeSuccess,
   paidEnrollment,
   freeEnrollment,
+  userCourses,
   read,
   update,
   addLesson,
@@ -26,7 +27,7 @@ router.get('/courses', courses)
 router.post("/course/upload-image", uploadImage);
 router.post("/course/remove-image", removeImage);
 
-
+router.get('/user-courses', requireSignIn, userCourses)
 router.post("/course", requireSignIn, isInstructor, create);
 router.put("/course/:slug", requireSignIn, update);
 router.get('/course/:slug', read)

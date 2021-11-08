@@ -42,6 +42,8 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    // Course
+    courses: [{type: Schema.Types.ObjectId, ref:'course'}]
   },
   { timestamps: true }
 );
