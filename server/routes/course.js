@@ -5,6 +5,7 @@ import {
   create,
   unpublish,
   publish,
+  userReadCourse,
   stripeSuccess,
   paidEnrollment,
   freeEnrollment,
@@ -20,7 +21,7 @@ import {
   uploadVideo,
 } from "../controller/course";
  import formidable from 'express-formidable'
-import { isInstructor, requireSignIn } from "../middlewares";
+import { isEnrolled, isInstructor, requireSignIn } from "../middlewares";
 const router = express.Router();
 
 router.get('/courses', courses)
@@ -45,6 +46,6 @@ router.post("/course/lesson/:slug/:intsructorId", requireSignIn, addLesson);
 router.put("/course/lesson/:slug/:intsructorId", requireSignIn, updateLesson);
 router.put("/course/:slug/:lessonId", requireSignIn, removeLesson);
 
-
+router.get("/user/course/:slug",requireSignIn, isEnrolled,userReadCourse);
 
 module.exports = router; 
