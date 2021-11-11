@@ -12,7 +12,7 @@ import {
   Skeleton,
   Statistic,
 } from "antd";
-import { Link } from "react-router-dom";
+import Link  from "next/link";
 import { useState } from "react";
 import { SyncOutlined, PlayCircleOutlined } from "@ant-design/icons";
 const UserIndex = () => {

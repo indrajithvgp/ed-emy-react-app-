@@ -399,11 +399,12 @@ export const stripeSuccess = async (req, res) => {
     const { courseId } = req.params;
     const course = await Course.findById(courseId).exec();
     const user = await User.findById(req.user._id).exec();
-    if(!user.stripeSession.id) return res.sendStatus(400)
+    if (!user.stripeSession.id) return res.sendStatus(400);
 
-
-    const session = await stripe.checkout.sessions.retrieve(user.stripeSession.id);
-    if(session.payment_status==="paid") {
+    const session = await stripe.checkout.sessions.retrieve(
+      user.stripeSession.id
+    );
+    if (session.payment_status === "paid") {
       await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -419,22 +420,75 @@ export const stripeSuccess = async (req, res) => {
     res.json({ success: true, course });
   } catch (err) {
     console.log(err);
-    res.json({success: false});
+    res.json({ success: false });
+  }
+};
+
+export const userCourses = async (req, res, next) => {
+  const user = await User.findById(req.user._id).exec();
+  const courses = await Course.find({ _id: { $in: user.courses } })
+    .populate("instructor", "_id name")
+    .exec();
+  res.json(courses);
+};
+
+export const userReadCourse = async (req, res, next) => {
+  const user = await User.findById(req.user._id).exec();
+  const courses = await Course.find({ _id: { $in: user.courses } })
+    .populate("instructor", "_id name")
+    .exec();
+  res.json(courses);
+};
+
+export const markCompleted = async (req, res) => {
+  const { courseId, lessonId } = req.body;
+  const existing = await Completed.findOne({
+    user: req.user._id,
+    course: courseId,
+  }).exec();
+  if (existing) {
+    const updated = await Completed.findOneAndUpdate(
+      // course
+      { user: req.user._id, course: courseId },
+      { $addToSet: { lessons: lessonId } },
+      { new: true }
+    ).exec();
+    return res.json({ ok: true });
+  } else {
+    const created = await new Completed({
+      user: req.user._id,
+      course: courseId,
+      lessons: lessonId,
+    }).save()
+    
+    return res.json({ ok: true });
+  }
+};
+
+export const listCompleted = async (req, res) => {
+  try{
+    const list = await Completed.findOne({user: req.user._id, course: req.body.courseId}).exec()
+    list && res.json(list.lessons)
+  }catch(err){
+
   }
 }
 
-export const userCourses = async(req,res,next)=>{
-  const user = await User.findById(req.user._id).exec()
-  const courses = await Course.find({_id:{$in: user.courses}}).populate('instructor', '_id name').exec()
-  res.json(courses)
-  
+export const markIncompleted = async (req, res)=>{
+  const { courseId, lessonId } = req.body;
+  const existing = await Completed.findOne({
+    user: req.user._id,
+    course: courseId,
+  }).exec();
 
-}
-
-export const isEnrolled = async(req,res,next)=>{
-  const user = await User.findById(req.user._id).exec()
-  const courses = await Course.find({_id:{$in: user.courses}}).populate('instructor', '_id name').exec()
-  res.json(courses)
-  
-
+  if (existing) {
+    const updated = await Completed.findOneAndUpdate(
+      // course
+      { user: req.user._id, course: courseId },
+      { $pull: { lessons: lessonId } },
+      { new: true }
+    ).exec();
+    return res.json({ ok: true });
+  } 
+    return res.json({ ok: true });
 }

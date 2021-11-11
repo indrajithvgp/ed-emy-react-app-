@@ -9,33 +9,71 @@ import { Button, Avatar, Menu, Dropdown, Icon, message } from "antd";
 import {
   PlayCircleOutlined,
   MenuFoldOutlined,
+  CheckCircleFilled,
+  MinusCircleFilled,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 const SingleCourse = () => {
   const [clicked, setClicked] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-
-  const [course, setCourse] = useState({ lessons: [], course: [] });
+  const [completedLessons, setCompletedLessons] = useState([]);
+  const [course, setCourse] = useState({lessons:[]});
+  const [updateState, setUpdateState] = useState(false)
 
   // const {state:{user}} = useContext(Context)
   const router = useRouter();
   const { slug } = router.query;
+  const loadCourse = async () => {
+    const { data } = await axios.get(`/api/user/course/${slug}`);
+    console.log(data);
+    setCourse(data);
+  };
+  useEffect(() => {
+    if (slug) {
+      loadCourse();
+    }
+  }, [slug]);
 
   useEffect(() => {
-    if (slug) loadCourse();
-  }, []);
+    if (course) {
+      loadCompletedLessons();
+    }
+  }, [course]);
 
-  async function loadCourse() {
-    const { data } = await axios.get(`/api/user/course/${slug}`);
-    setCourse(data);
+  async function loadCompletedLessons() {
+    const { data } = await axios.post(`/api/list-completed`, {
+      courseId: course._id,
+    });
+    setCompletedLessons(data);
   }
 
-  async function markCompleted(){
-    const {data} = await axios.post(`/api/mark-completed`, {
+  console.log(course, completedLessons);
+
+  const markIncompleted = async () => {
+    try {
+      const { data } = await axios.post(`/api/mark-incomplete`, {
+        courseId: course._id,
+        lessonId: course.lessons[clicked]._id,
+      });
+      const all = completedLessons;
+      const index = all.indexOf(course.lessons[clicked]._id);
+      if (index > -1) {
+        all.splice(index, 1);
+        setCompletedLessons(all);
+        setUpdateState(!updateState);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  async function markCompleted() {
+    const { data } = await axios.post(`/api/mark-completed`, {
       courseId: course._id,
-      lessonId: course.lessons[clicked]._id
-    })
+      lessonId: course.lessons[clicked]._id,
+    });
+    setCompletedLessons([...completedLessons, course.lessons[clicked]._id]);
   }
 
   return (
@@ -52,26 +90,50 @@ const SingleCourse = () => {
           <Menu
             defaultSelectedKeys={[clicked]}
             inlineCollapsed={collapsed}
-            style={{ height: "80vh", overflow: "scroll" }}
+            style={{
+              height: "80vh",
+              overflow: "scroll",
+              backgroundColor: "#DFD7C8",
+            }}
           >
-            {course.lessons.map((lesson, index) => (
-              <Menu.Item
-                onClick={() => setClicked(index)}
-                key={index}
-                icon={<Avatar>{index + 1}</Avatar>}
-              >
-                {lesson.title.substring(0, 30)}
-              </Menu.Item>
-            ))}
+            {course.lessons &&
+              course.lessons.map((lesson, index) => (
+                <Menu.Item
+                  onClick={() => setClicked(index)}
+                  key={index}
+                  icon={<Avatar>{index + 1}</Avatar>}
+                >
+                  {lesson.title.substring(0, 30)}{" "}
+                  {completedLessons.includes(lesson._id) ? (
+                    <CheckCircleFilled
+                      className="text-primary ms-auto ml-2"
+                      style={{ marginTop: "13px" }}
+                    />
+                  ) : (
+                    <MinusCircleFilled
+                      className="text-danger ms-auto ml-2"
+                      style={{ marginTop: "13px" }}
+                    />
+                  )}
+                </Menu.Item>
+              ))}
           </Menu>
         </div>
         <div className="col">
           {clicked !== -1 ? (
             <>
-            <div className="col alert alert-primary square">
-              <b>{course.lessons[clicked].title.substring(0,30)}</b>
-              <span className="ms-auto pointer" onClick={markCompleted}>Mark as Completed</span>
-            </div>
+              <div className="col alert alert-primary square">
+                <b>{course.lessons[clicked].title.substring(0, 30)}</b>
+                {completedLessons.includes(course.lessons[clicked]._id) ? (
+                  <span className="ms-auto pointer" onClick={markIncompleted}>
+                    Mark as Incompleted
+                  </span>
+                ) : (
+                  <span className="ms-auto pointer" onClick={markCompleted}>
+                    Mark as Completed
+                  </span>
+                )}
+              </div>
               {course.lessons[clicked].video &&
                 course.lessons[clicked].video.Location && (
                   <>
@@ -82,6 +144,7 @@ const SingleCourse = () => {
                         width="100%"
                         height="100%"
                         controls={true}
+                        onEnded={()=> markCompleted()}
                       />
                     </div>
                   </>

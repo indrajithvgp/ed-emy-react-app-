@@ -24,7 +24,7 @@ const TopNav = () => {
   const router = useRouter();
   const { state, dispatch } = useContext(Context);
   const { user } = state;
-  console.log(user)
+  // console.log(user)
 
   useEffect(() => {
     process.browser && setCurrent(window.location.pathname);

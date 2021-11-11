@@ -15,7 +15,7 @@ const StudentRoute = ({ children, showNav = true }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log("user", user);
+        // console.log("user", user);
         const { data } = await axios.get("/api/current-user");
         if (data.ok) setOk(true);
       } catch (err) {
