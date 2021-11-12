@@ -34,7 +34,7 @@ const SingleCourse = ({ course }) => {
       setLoading(false);
       router.push(`/user/course/${data.course.slug}`);
     } catch (err) {
-      toast.error("Enrollment Failed, Please try again");
+      // toast.error("Enrollment Failed, Please try again");
       setLoading(false);
     }
   };
@@ -50,7 +50,7 @@ const SingleCourse = ({ course }) => {
       setLoading(false);
       router.push(`/user/course/${data.course.slug}`)
     }catch(err){
-      toast.error("Enrollment Failed, Please try again");
+      // toast.error("Enrollment Failed, Please try again");
       setLoading(false);
     }
   };

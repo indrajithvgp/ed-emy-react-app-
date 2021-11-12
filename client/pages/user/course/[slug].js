@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import UserRoute from "../../../components/routes/UserRoute";
 import { useContext } from "react";
+import ReactMarkdown from "react-markdown";
+import ReactPlayer from "react-player";
+import remarkGfm from "remark-gfm";
 import { Context } from "../../../context";
 import StudentRoute from "../../../components/routes/StudentRoute";
 import { Button, Avatar, Menu, Dropdown, Icon, message } from "antd";
@@ -18,16 +21,16 @@ const SingleCourse = () => {
   const [loading, setLoading] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [completedLessons, setCompletedLessons] = useState([]);
-  const [course, setCourse] = useState({lessons:[]});
-  const [updateState, setUpdateState] = useState(false)
+  const [course, setCourse] = useState({lessons:[], id: ""});
+  const [updateState, setUpdateState] = useState(false) 
 
   // const {state:{user}} = useContext(Context)
   const router = useRouter();
   const { slug } = router.query;
   const loadCourse = async () => {
     const { data } = await axios.get(`/api/user/course/${slug}`);
-    console.log(data);
-    setCourse(data);
+    console.log(data)
+    setCourse({lessons: data.lessons, id: data.id});
   };
   useEffect(() => {
     if (slug) {
@@ -69,6 +72,7 @@ const SingleCourse = () => {
   };
 
   async function markCompleted() {
+    console.log(course._id)
     const { data } = await axios.post(`/api/mark-completed`, {
       courseId: course._id,
       lessonId: course.lessons[clicked]._id,
@@ -79,7 +83,7 @@ const SingleCourse = () => {
   return (
     <StudentRoute>
       <div className="row">
-        <div style={{ maxWidth: 320 }}>
+        <div style={{ maxWidth: 300 }}>
           <Button
             className="text-primary mt-1 btn-block mb-2"
             onClick={() => setCollapsed(!collapsed)}
@@ -87,36 +91,43 @@ const SingleCourse = () => {
             {createElement(collapsed ? MenuFoldOutlined : MenuUnfoldOutlined)}{" "}
             {!collapsed && "Lessons"}
           </Button>
+
           <Menu
             defaultSelectedKeys={[clicked]}
             inlineCollapsed={collapsed}
+            mode="inline"
             style={{
               height: "80vh",
               overflow: "scroll",
-              backgroundColor: "#DFD7C8",
+              // backgroundColor: "#DFD7C8",
             }}
           >
             {course.lessons &&
-              course.lessons.map((lesson, index) => (
-                <Menu.Item
-                  onClick={() => setClicked(index)}
-                  key={index}
-                  icon={<Avatar>{index + 1}</Avatar>}
-                >
-                  {lesson.title.substring(0, 30)}{" "}
-                  {completedLessons.includes(lesson._id) ? (
-                    <CheckCircleFilled
-                      className="text-primary ms-auto ml-2"
-                      style={{ marginTop: "13px" }}
-                    />
-                  ) : (
-                    <MinusCircleFilled
-                      className="text-danger ms-auto ml-2"
-                      style={{ marginTop: "13px" }}
-                    />
-                  )}
-                </Menu.Item>
-              ))}
+              course.lessons.map((lesson, index) => {
+                // console.log("a")
+                return (
+                  <>
+                    <Menu.Item
+                      onClick={() => setClicked(index)}
+                      key={index}
+                      icon={<Avatar>{index + 1}</Avatar>}
+                    >
+                      {lesson.title.substring(0, 30)}{" "}
+                      {completedLessons.includes(lesson._id) ? (
+                        <CheckCircleFilled
+                          className="text-primary ms-auto ml-2"
+                          style={{ marginTop: "13px" }}
+                        />
+                      ) : (
+                        <MinusCircleFilled
+                          className="text-danger ms-auto ml-2"
+                          style={{ marginTop: "13px" }}
+                        />
+                      )}
+                    </Menu.Item>
+                  </>
+                );
+              })}
           </Menu>
         </div>
         <div className="col">
@@ -125,11 +136,11 @@ const SingleCourse = () => {
               <div className="col alert alert-primary square">
                 <b>{course.lessons[clicked].title.substring(0, 30)}</b>
                 {completedLessons.includes(course.lessons[clicked]._id) ? (
-                  <span className="ms-auto pointer" onClick={markIncompleted}>
+                  <span className="float-end pointer" onClick={markIncompleted}>
                     Mark as Incompleted
                   </span>
                 ) : (
-                  <span className="ms-auto pointer" onClick={markCompleted}>
+                  <span className="float-end pointer" onClick={markCompleted}>
                     Mark as Completed
                   </span>
                 )}
@@ -144,7 +155,7 @@ const SingleCourse = () => {
                         width="100%"
                         height="100%"
                         controls={true}
-                        onEnded={()=> markCompleted()}
+                        onEnded={() => markCompleted()}
                       />
                     </div>
                   </>

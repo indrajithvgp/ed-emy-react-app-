@@ -7,6 +7,7 @@ import { Avatar, Tooltip, Card, Button, Modal, Item, Meta, List } from "antd";
 import {
   CheckOutlined,
   EditOutlined,
+  UserSwitchOutlined,
   UploadOutlined,
   CloseOutlined,
   QuestionOutlined,
@@ -22,13 +23,22 @@ const CourseView = () => {
   const [visible, setVisible] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [students, setStudents] = useState(0);
   const [uploadButtonText, setUploadButtonText] = useState("Upload Video");
   const [values, setValues] = useState({
     title: "",
     content: "",
     video: {},
   });
-
+  useEffect(() => {
+    course && studentsCount();
+  }, [course]);
+  async function studentsCount() {
+    const { data } = await axios.post(`/api/instructor/student-count`, {
+      courseId: course._id,
+    });
+    setStudents(data.length);
+  }
   useEffect(() => {
     loadCourse();
   }, [slug]);
@@ -70,19 +80,21 @@ const CourseView = () => {
       toast("Lesson Add Failed");
     }
   };
-  const handlePublish= async(e, courseId)=>{
-    try{
-let answer = window.confirm('Once you publish course, users can enroll for course in marketplace ?')
-    if(!answer) return
-    const {data} = await axios.put(`/api/course/publish/${courseId}`)
-    setCourse(data)
-    toast.success("Your Course is live");
-    }catch(err){
-      toast.error("Course has not published")
+  const handlePublish = async (e, courseId) => {
+    try {
+      let answer = window.confirm(
+        "Once you publish course, users can enroll for course in marketplace ?"
+      );
+      if (!answer) return;
+      const { data } = await axios.put(`/api/course/publish/${courseId}`);
+      setCourse(data);
+      toast.success("Your Course is live");
+    } catch (err) {
+      toast.error("Course has not published");
     }
-  }
-  const handleUnpublish= async(e, courseId)=>{
-    try{
+  };
+  const handleUnpublish = async (e, courseId) => {
+    try {
       let answer = window.confirm(
         "Once you Unpublish the course, course will no longer be in marketplace. Sure you want to unpublish ?"
       );
@@ -90,11 +102,10 @@ let answer = window.confirm('Once you publish course, users can enroll for cours
       const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
       setCourse(data);
       toast.success("Your Course is Unpublished");
-    }catch(err){
+    } catch (err) {
       toast.error("Course has not unpublished");
     }
-      
-  }
+  };
   const handlevideo = async (e) => {
     setUploading(true);
     try {
@@ -150,6 +161,9 @@ let answer = window.confirm('Once you publish course, users can enroll for cours
                   </div>
 
                   <div className="d-flex pt-2">
+                    <Tooltip title={`${students} Enrolled`}>
+                      <UserSwitchOutlined className="h5 pointer text-info mr-4" />
+                    </Tooltip>
                     <Tooltip title="edit">
                       <EditOutlined
                         onClick={() =>

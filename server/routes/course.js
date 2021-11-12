@@ -49,7 +49,7 @@ router.post("/course/lesson/:slug/:intsructorId", requireSignIn, addLesson);
 router.put("/course/lesson/:slug/:intsructorId", requireSignIn, updateLesson);
 router.put("/course/:slug/:lessonId", requireSignIn, removeLesson);
 
-router.get("/user/course/:slug",requireSignIn, isEnrolled,userReadCourse);
+router.get("/user/course/:slug", requireSignIn, isEnrolled, read);
 router.post('/mark-completed', requireSignIn, markCompleted);
 router.post("/mark-incomplete", requireSignIn, markIncompleted);
 router.post("/list-completed", requireSignIn, listCompleted);

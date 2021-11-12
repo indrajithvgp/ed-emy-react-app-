@@ -2,6 +2,7 @@ import AWS from "aws-sdk";
 import { nanoid } from "nanoid";
 import Course from "../models/course";
 import User from "../models/user";
+import Completed from "../models/completed";
 import slugify from "slugify";
 import fs from "fs";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -434,9 +435,11 @@ export const userCourses = async (req, res, next) => {
 
 export const userReadCourse = async (req, res, next) => {
   const user = await User.findById(req.user._id).exec();
+  console.log(user)
   const courses = await Course.find({ _id: { $in: user.courses } })
     .populate("instructor", "_id name")
     .exec();
+    console.log(courses)
   res.json(courses);
 };
 
@@ -468,8 +471,9 @@ export const markCompleted = async (req, res) => {
 export const listCompleted = async (req, res) => {
   try{
     const list = await Completed.findOne({user: req.user._id, course: req.body.courseId}).exec()
-    list && res.json(list.lessons)
-  }catch(err){
+    if(list){
+      return res.status(200).json(list.lessons);
+    }}catch(err){
 
   }
 }
