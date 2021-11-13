@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import {
   makeInstructor,
   studentsCount,
+  instructorBalance,
   getAccountStatus,
   currentInstructor,
   instructorCourses,
@@ -16,6 +17,7 @@ router.post("/get-account-status", requireSignIn, getAccountStatus);
 router.get("/current-instructor", requireSignIn, currentInstructor);
 
 router.get("/instructor-courses", requireSignIn, instructorCourses);
+router.get("/instructor/balance", requireSignIn, instructorBalance);
 
 router.post("/instructor/student-count", requireSignIn, studentsCount);
 
