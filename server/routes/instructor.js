@@ -5,6 +5,7 @@ import {
   makeInstructor,
   studentsCount,
   instructorBalance,
+  instructorPayoutSettings,
   getAccountStatus,
   currentInstructor,
   instructorCourses,
@@ -20,5 +21,5 @@ router.get("/instructor-courses", requireSignIn, instructorCourses);
 router.get("/instructor/balance", requireSignIn, instructorBalance);
 
 router.post("/instructor/student-count", requireSignIn, studentsCount);
-
+router.post("/instructor/payout-settings", requireSignIn, instructorPayoutSettings);
 module.exports = router;

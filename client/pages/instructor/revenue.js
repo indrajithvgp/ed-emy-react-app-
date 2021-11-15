@@ -7,9 +7,12 @@ import {
   DollarOutlined,
   SettingOutlined,
   LoadingOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
+import { toast } from "react-toastify";
 const Revenue = () => {
   const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
   const handlePayoutSettings = () => {};
   useEffect(() => {
     sendBalanceRequest();
@@ -18,6 +21,17 @@ const Revenue = () => {
     const { data } = await axios.get("/api/instructor/balance");
     setBalance(data);
   }
+
+  const handlePayoutSettings = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get("/api/instructor/payout-settings");
+      window.location.href = data;
+    } catch (err) {
+      setLoading(false);
+      toast.error("Unable to process payment settings");
+    }
+  };
   return (
     <InstructorRoute>
       <div className="container">
@@ -48,10 +62,14 @@ const Revenue = () => {
             <hr />
             <h4>
               Payouts{" "}
-              <SettingOutlined
-                className="float-end pointer"
-                onClick={handlePayoutSettings}
-              />
+              {!loading ? (
+                <SettingOutlined
+                  className="float-end pointer"
+                  onClick={handlePayoutSettings}
+                />
+              ) : (
+                <SyncOutlined spin className="float-end pointer" />
+              )}
             </h4>
             <small>Update your stripe account details or previous payout</small>
           </div>
