@@ -87,6 +87,7 @@ const TopNav = () => {
             </Item>
             <Item
               key="/register"
+              className="float-end"
               onClick={(e) => setCurrent(e.key)}
               icon={<UserAddOutlined />}
             >
@@ -98,39 +99,35 @@ const TopNav = () => {
         )}
 
         {user && user.role.includes("Instructor") && (
-          
-            <Item
-              key="/instructor"
-              onClick={(e) => setCurrent(e.key)}
-              className="ms-auto"
-              icon={<UserOutlined />}
-              // icon={<CarryOutlined />}
-            >
-              <Link href="/instructor">
-                <a>Instructor</a>
-              </Link>
-            </Item>
-         
+          <Item
+            key="/instructor"
+            onClick={(e) => setCurrent(e.key)}
+            className="float-end"
+            icon={<UserOutlined />}
+            // icon={<CarryOutlined />}
+          >
+            <Link href="/instructor">
+              <a>Instructor</a>
+            </Link>
+          </Item>
         )}
         {user && (
-          
-            <SubMenu
-              icon={<CoffeeOutlined />}
-              className="ms-auto"
-              title={user && user.name}
-            >
-              <Menu.ItemGroup>
-                <Item className="ms-auto" key="/user">
-                  <Link href="/user">
-                    <a>Dashboard</a>
-                  </Link>
-                </Item>
-                <Item key="/logout" onClick={logout}>
-                  Logout
-                </Item>
-              </Menu.ItemGroup>
-            </SubMenu>
-          
+          <SubMenu
+            icon={<CoffeeOutlined />}
+            className="ms-auto"
+            title={user && user.name}
+          >
+            <Menu.ItemGroup>
+              <Item className="ms-auto" key="/user">
+                <Link href="/user">
+                  <a>Dashboard</a>
+                </Link>
+              </Item>
+              <Item key="/logout" onClick={logout}>
+                Logout
+              </Item>
+            </Menu.ItemGroup>
+          </SubMenu>
         )}
       </Menu>
     </>

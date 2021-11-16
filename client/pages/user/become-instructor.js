@@ -31,7 +31,7 @@ const BecomeInstructor = () => {
       });
   };
   return (
-    <>
+    <UserRoute>
       <h1 className="jumbotron text-center square">Create Course</h1>
       <div className="container">
         <div className="row">
@@ -67,7 +67,7 @@ const BecomeInstructor = () => {
           </div>
         </div>
       </div>
-    </>
+    </UserRoute>
   );
 };
 

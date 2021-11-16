@@ -51,13 +51,13 @@ const UserIndex = () => {
 
       {courses &&
         courses.map((course, index) => (
-          <div className="media pt-2 pb-1" key={course._id}>
+          <div className="d-flex pt-2 pb-1" key={course._id}>
             <Avatar
               size={80}
               shape="square"
               src={course.image ? course.image.Location : "/course.png"}
             />
-            <div className="media-body pl-2">
+            <div className="flex-grow-1 ms-3 pl-2">
               <div className="row">
                 <div className="col">
                   <Link
@@ -65,24 +65,29 @@ const UserIndex = () => {
                     className="pointer"
                   >
                     <a>
-                      <h5 className="mt-2 text-primary">{course.name}</h5>
+                      <h5 className="mt-2 text-primary">{course.title}</h5>
                     </a>
                   </Link>
-                  <p style={{ marginTop: "-10px" }}>{course.lessons.length} Lessons</p>
+                  <p style={{ marginTop: "0px" }}>
+                    {course.lessons.length} Lessons
+                  </p>
                   <p
-                    style={{ marginTop: "-15px", fontSize: "-12px" }}
+                    style={{ marginTop: "-3px", fontSize: "-12px" }}
                     className="text-muted"
                   >
                     By {course.instructor.name}
                   </p>
                 </div>
-                <div className="col-md-3 mt-3 text-center">
+                <div className="col-md-3 mt-2 text-center">
                   <Link
                     href={`/user/course/${course.slug}`}
                     className="pointer"
                   >
                     <a>
-                      <PlayCircleOutlined className="h2 text-primary pointer"/>
+                      <PlayCircleOutlined
+                        style={{ fontSize: "50px" }}
+                        className="h2 text-primary pointer"
+                      />
                     </a>
                   </Link>
                 </div>

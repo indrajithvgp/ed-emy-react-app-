@@ -86,19 +86,22 @@ const SingleCourse = () => {
         <div style={{ maxWidth: 300 }}>
           <Button
             className="text-primary mt-1 btn-block mb-2"
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => setCollapsed(collapsed)}
           >
-            {createElement(collapsed ? MenuFoldOutlined : MenuUnfoldOutlined)}{" "}
+            {createElement(collapsed ? MenuFoldOutlined : MenuUnfoldOutlined)}
+            {"   "}
             {!collapsed && "Lessons"}
           </Button>
 
           <Menu
             defaultSelectedKeys={[clicked]}
             inlineCollapsed={collapsed}
+            defaultOpenKeys={["sub1"]}
             mode="inline"
             style={{
               height: "80vh",
-              overflow: "scroll",
+              overflow: "scroll-y",
+              lineHeight:"0px",
               // backgroundColor: "#DFD7C8",
             }}
           >
@@ -136,11 +139,19 @@ const SingleCourse = () => {
               <div className="col alert alert-primary square">
                 <b>{course.lessons[clicked].title.substring(0, 30)}</b>
                 {completedLessons.includes(course.lessons[clicked]._id) ? (
-                  <span className="float-end pointer" onClick={markIncompleted}>
-                    Mark as Incompleted
+                  <span
+                    className="float-end pointer fw-bold"
+                    style={{ color: "red" }}
+                    onClick={markIncompleted}
+                  >
+                    <b>Mark as Incompleted</b>
                   </span>
                 ) : (
-                  <span className="float-end pointer" onClick={markCompleted}>
+                  <span
+                    className="float-end pointer fw-bold fst-italic"
+                    style={{ color: "green" }}
+                    onClick={markCompleted}
+                  >
                     Mark as Completed
                   </span>
                 )}
@@ -170,7 +181,7 @@ const SingleCourse = () => {
               <div className="d-flex justify-content-center p-5">
                 <div className="text-center p-5">
                   <PlayCircleOutlined className="text-primary display-1 p-5" />
-                  <p className="lead">Click on the lesson to start learning</p>
+                  <p className="lead">Click on the Lesson to Start Learning</p>
                 </div>
               </div>
             </>

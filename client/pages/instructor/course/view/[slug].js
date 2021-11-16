@@ -139,32 +139,38 @@ const CourseView = () => {
             {JSON.stringify(course,null,4)}
         </pre> */}
         {course && (
-          <div className="container-fluid pt-1">
+          <div className="container-fluid  pt-1">
             <div className="media pt-2" style={{ display: "flex" }}>
               <Avatar
                 size={80}
                 src={course.image ? course.image.Location : "/course.png"}
               />
-              <div className="media-body pl-2">
+              <div className="media-body d-flex flex-grow-1 ms-3 pl-2">
                 <div
                   className="row"
                   style={{ display: "flex", justifyContent: "space-around" }}
                 >
                   <div className="col">
-                    <h5 className="mt-2 text-primary">{course.title}</h5>
-                    <p style={{ marginTop: "-10px" }}>
+                    <h5 className="mt-3 text-primary">{course.title}</h5>
+                    <p style={{ marginTop: "0px" }}>
                       {course.lessons && course.lessons.length} Lessons
                     </p>
                     <p style={{ marginTop: "-10px", fontSize: "10px" }}>
+                      <span className="fw-bold fst-italic text-info">
+                        Category-
+                      </span>{" "}
                       {course.category}
                     </p>
                   </div>
 
                   <div className="d-flex pt-2">
-                    <Tooltip title={`${students} Enrolled`}>
-                      <UserSwitchOutlined className="h5 pointer text-info mr-4" />
+                    <Tooltip
+                      className="flex-grow-1"
+                      title={`${students} Enrolled`}
+                    >
+                      <UserSwitchOutlined className="h5 pointer text-info " />
                     </Tooltip>
-                    <Tooltip title="edit">
+                    <Tooltip className="flex-grow-1" title="Edit">
                       <EditOutlined
                         onClick={() =>
                           router.push(`/instructor/course/edit/${slug}`)
@@ -173,11 +179,14 @@ const CourseView = () => {
                       />
                     </Tooltip>
                     {course.lessons && course.lessons.length < 5 ? (
-                      <Tooltip title="Min 5 Lessons required to publish">
+                      <Tooltip
+                        className="flex-grow-1"
+                        title="Min 5 Lessons required to publish"
+                      >
                         <QuestionOutlined className="h5 pointer text-danger" />
                       </Tooltip>
                     ) : course.published ? (
-                      <Tooltip title="Unpublish">
+                      <Tooltip className="flex-grow-1" title="Unpublish">
                         <CloseOutlined
                           onClick={(e) => handleUnpublish(e, course._id)}
                           className="h5 pointer text-danger"
@@ -241,7 +250,10 @@ const CourseView = () => {
             <div className="row pb-5">
               <div className="col lesson-list">
                 <h4>
-                  {course && course.lessons && course.lessons.length} Lessons
+                  {course && course.lessons && course.lessons.length}{" "}
+                  {course && course.lessons && course.lessons.length == 1
+                    ? "Lesson"
+                    : " Lessons"}
                 </h4>
                 <List
                   itemLayout="horizontal"

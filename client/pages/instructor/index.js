@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 
 const style = {
-  marginTop: "-15px",
+  marginTop: "-3px",
   fontSize: "10px",
 };
 
@@ -23,27 +23,27 @@ const InstructorIndex = () => {
   console.log(courses)
   return (
     <InstructorRoute>
-      <h1 className="jumbotron text-center square">Instructor Dashboard</h1>
+      <h1 className="jumbotron text-center square p-2">Instructor Dashboard</h1>
       {courses &&
         courses.map((course) => (
           <>
-            <div className="media">
+            <div className="d-flex mb-5">
               <Avatar
                 size={80}
                 src={course.image ? course.image.Location : "/course.png"}
               />
-              <div className="media-body md-3 pl-2">
+              <div className="media-body flex-grow-1 ms-3 md-3 pl-2">
                 <div className="row">
                   <div className="col">
                     <Link
                       className="pointer"
                       href={`/instructor/course/view/${course.slug}`}
                     >
-                      <a className="mt-2 text-primary">
-                        <h5 className="pt-2">{course.title}</h5>
+                      <a className="text-primary">
+                        <h5 className="mt-2">{course.title}</h5>
                       </a>
                     </Link>
-                    <p style={{ marginTop: "-10px" }}>
+                    <p style={{ marginTop: "0px" }}>
                       {course.lessons.length} Lessons
                     </p>
                     {course.lessons.length < 5 ? (
@@ -63,11 +63,17 @@ const InstructorIndex = () => {
                   <div className="col-md-3 mt-3 text-center">
                     {course.published ? (
                       <Tooltip title="Published">
-                        <CheckCircleOutlined className="h5 pointer text-success" />
+                        <CheckCircleOutlined
+                          style={{ fontSize: "35px" }}
+                          className="h5 pointer text-success"
+                        />
                       </Tooltip>
                     ) : (
                       <Tooltip title="Unpublished">
-                        <CloseCircleOutlined className="h5 pointer text-warning" />
+                        <CloseCircleOutlined
+                          style={{ fontSize: "35px" }}
+                          className="h5 pointer text-warning"
+                        />
                       </Tooltip>
                     )}
                   </div>

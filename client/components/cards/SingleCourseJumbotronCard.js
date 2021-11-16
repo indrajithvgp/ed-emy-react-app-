@@ -27,9 +27,9 @@ const SingleCourseJumbotronCard = ({
 }) => {
   // console.log(lessons, paid)
   return (
-    <div className="jumbotron bg-primary square p-3">
+    <div className="jumbotron bg-primary square p-4">
       <div className="row">
-        <div className="col-md-8">
+        <div className="col-md-8 p-4">
           <h1 className="text-light font-weight-bold">{name}</h1>
           <p className="lead">
             {description && description.substring(0, 160)}...
@@ -67,7 +67,7 @@ const SingleCourseJumbotronCard = ({
           ) : (
             <>
               <img
-                src={image&&image.Location}
+                src={image && image.Location}
                 className="img img-fluid"
                 alt="course"
               />
