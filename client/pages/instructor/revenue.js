@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 const Revenue = () => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(false);
-  const handlePayoutSettings = () => {};
+  // const handlePayoutSettings = () => {};
   useEffect(() => {
     sendBalanceRequest();
   }, []);
@@ -29,7 +29,7 @@ const Revenue = () => {
       window.location.href = data;
     } catch (err) {
       setLoading(false);
-      toast.error("Unable to process payment settings");
+      toast.error("Unable to Process Payment Settings");
     }
   };
   return (
@@ -37,13 +37,15 @@ const Revenue = () => {
       <div className="container">
         <div className="row pt-2">
           <div className="col md-8 offset-md-2 bg-light p-5">
-            <h2 className="text-center">
-              Revenue Report <DollarOutlined className="float-end" />
+            <h2>
+              <DollarOutlined className="float-end" />
             </h2>
-            <small>
-              You get paid directly from stripe to your bank account every 48
-              hour
-            </small>
+            <h2 className="text-center">Revenue Report</h2>
+            <p className="mt-5">
+              You get paid directly from{" "}
+              <span className="fw-bold fst-italic">Stripe</span> to your bank
+              account every 48 hour
+            </p>
             <hr />
             <h4>
               Pending Balance
@@ -58,7 +60,9 @@ const Revenue = () => {
                   })}
               </span>
             </h4>
-            <small>for 48 Hours</small>
+            <small>
+              for <strong>48</strong> Hours
+            </small>
             <hr />
             <h4>
               Payouts{" "}
@@ -71,7 +75,10 @@ const Revenue = () => {
                 <SyncOutlined spin className="float-end pointer" />
               )}
             </h4>
-            <small>Update your stripe account details or previous payout</small>
+            <small>
+              Update your <span className="fw-bold fst-italic">Stripe</span>{" "}
+              account details for Previous Payout
+            </small>
           </div>
         </div>
       </div>

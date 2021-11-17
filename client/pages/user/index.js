@@ -45,9 +45,12 @@ const UserIndex = () => {
           className="d-flex justify-content-center display-1 text-danger p-1"
         />
       )}
-      <h1 className="jumbotron text-center square p-3">
-        <pre>User Dashboard</pre>
-      </h1>
+      <div className="mt-2 mb-2 p-3 bg-info text-center bg-darkrounded">
+        <h1 className="text-white">User Dashboard</h1>
+      </div>
+      {/* <h1 className="jumbotron text-center square p-3">
+        <pre className="text-info">User Dashboard</pre>
+      </h1> */}
 
       {courses &&
         courses.map((course, index) => (

@@ -60,7 +60,7 @@ const CourseView = () => {
     } catch (err) {
       console.log(err);
       setUploading(false);
-      toast.error("Video remove Failed");
+      toast.error("Video Remove Failed");
     }
   };
   const handleLesson = async (e) => {
@@ -83,12 +83,12 @@ const CourseView = () => {
   const handlePublish = async (e, courseId) => {
     try {
       let answer = window.confirm(
-        "Once you publish course, users can enroll for course in marketplace ?"
+        "Once You Publish Course, Users can Enroll for Course in the Marketplace ?"
       );
       if (!answer) return;
       const { data } = await axios.put(`/api/course/publish/${courseId}`);
       setCourse(data);
-      toast.success("Your Course is live");
+      toast.success("Your Course is Live");
     } catch (err) {
       toast.error("Course has not published");
     }
@@ -96,7 +96,7 @@ const CourseView = () => {
   const handleUnpublish = async (e, courseId) => {
     try {
       let answer = window.confirm(
-        "Once you Unpublish the course, course will no longer be in marketplace. Sure you want to unpublish ?"
+        "Once you Unpublish the Course, it will no longer be in the Marketplace. Sure You Want to Unpublish ?"
       );
       if (!answer) return;
       const { data } = await axios.put(`/api/course/unpublish/${courseId}`);
@@ -193,7 +193,7 @@ const CourseView = () => {
                         />
                       </Tooltip>
                     ) : (
-                      <Tooltip title="publish">
+                      <Tooltip title="Publish">
                         <CheckOutlined
                           onClick={(e) => handlePublish(e, course._id)}
                           className="h5 pointer text-success mr-4"

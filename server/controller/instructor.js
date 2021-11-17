@@ -55,6 +55,7 @@ export const getAccountStatus = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(400).json({ message: err.message });
   }
 };
 
@@ -111,3 +112,4 @@ export const instructorPayoutSettings = async (req, res) => {
     res.json(loginLink.url);
   } catch (err) {}
 };
+ 

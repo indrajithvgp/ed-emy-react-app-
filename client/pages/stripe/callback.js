@@ -27,7 +27,7 @@ const StripeCallback = ()=>{
     return (
       <>
         {error ? (
-          <h1>Error..</h1>
+          <h1 className="bg-warning p-2">{error}. Please try again later</h1>
         ) : (
           <SyncOutlined
             spin

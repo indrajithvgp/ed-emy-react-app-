@@ -32,7 +32,10 @@ const BecomeInstructor = () => {
   };
   return (
     <UserRoute>
-      <h1 className="jumbotron text-center square">Create Course</h1>
+      {/* <h1 className="jumbotron text-center square">Create Course</h1> */}
+      <div className="mt-2 mb-2 p-3 bg-secondary text-center bg-darkrounded">
+        <h1 className="text-white">Create Course</h1>
+      </div>
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3 text-center">
@@ -51,17 +54,19 @@ const BecomeInstructor = () => {
                 shape="round"
                 size="large"
                 onClick={becomeInstructor}
-                disabled={
-                  (user && user.role && !user.role.includes("Instructor")) ||
-                  loading
-                }
+                // disabled={
+                //   loading||(user && user.role && !user.role.includes("Instructor"))
+                //   // loading || (user && user.role)
+                  
+                // }
                 icon={loading ? <LoadingOutlined /> : <SettingOutlined />}
               >
                 {loading ? "Processing .." : "Payout Setup"}
               </Button>
 
               <p className="lead">
-                You will be redirected to stripe to complete the onboarding process.
+                You will be redirected to <strong>Stripe</strong> to complete
+                the onboarding process.
               </p>
             </div>
           </div>

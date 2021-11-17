@@ -95,7 +95,7 @@ const EditCourse = () => {
   };
 
   const handleDelete = async (index, item) => {
-    const answer = window.confirm("Are you sure you want to delete?");
+    const answer = window.confirm("Are You Sure You Want to Delete?");
     if (!answer) return;
     let allLessons = values.lessons;
     let removed = allLessons.splice(index, 1);
@@ -160,7 +160,7 @@ const EditCourse = () => {
       const index = arr.findIndex((el)=>el._id===current._id)
       arr[index] = current
       setValues({...values, lessons: arr})
-      toast("Lesson updated successfully")
+      toast("Lesson Updated Successfully")
     }
   };
   return (

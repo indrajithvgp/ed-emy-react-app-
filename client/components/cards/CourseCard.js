@@ -5,7 +5,7 @@ import { currencyFormatter } from "../../utils/helpers";
 const { Meta } = Card;
 
 const CourseCard = ({ course }) => {
-  const { name, instructor, slug, price, category, image, paid } = course;
+  const { title, instructor, slug, price, category, image, paid } = course;
   return (
     <Link href={`/course/${slug}`}>
       <a>
@@ -14,13 +14,13 @@ const CourseCard = ({ course }) => {
           cover={
             <img
               className="p-1"
-              src={image&&image.Location}
-              alt={name}
-              style={{ height: "200px", objectFit: "cover" }}
+              src={image && image.Location}
+              alt={title}
+              style={{ height: "170px", objectFit: "cover" }}
             />
           }
         >
-          <h2 className="font-weight-bold">{name}</h2>
+          <h2 className="font-weight-bold">{title}</h2>
           <p>by {instructor.name}</p>
           <Badge
             count={category}

@@ -40,7 +40,10 @@ const Register = () => {
 
   return (
     <>
-      <h1 className="jumbotron  bg-primary text-center square p-4">Register</h1>
+      {/* <h1 className="jumbotron  bg-primary text-center square p-4">Register</h1> */}
+      <div className="mt-2 mb-2 p-3 bg-primary text-center bg-darkrounded">
+        <h1 className="text-white">Register</h1>
+      </div>
       <div className="container col-md-4 offset-md-4 pb-5">
         <form onSubmit={handleSubmit}>
           <input

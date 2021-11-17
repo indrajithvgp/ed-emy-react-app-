@@ -16,12 +16,12 @@ function Home({courses}) {
   // },[])
   return (
     <>
-      <h1 className="jumbotron text-center bg-primary square p-4">
-        Online Education Marketplace
-      </h1>
+      <div className="mt-2 mb-2 p-3 bg-primary text-center bg-darkrounded">
+        <h1 className="text-white">Online Education Marketplace</h1>
+      </div>
       <div className="container-fluid">
         <div className="row">
-          {courses.map((course) => {
+          {courses && courses.map((course) => {
             return (
               <div key={course._id} className="col-md-4">
                 <CourseCard course={course} />

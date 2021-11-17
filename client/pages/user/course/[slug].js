@@ -115,18 +115,20 @@ const SingleCourse = () => {
                       key={index}
                       icon={<Avatar>{index + 1}</Avatar>}
                     >
-                      {lesson.title.substring(0, 30)}{" "}
-                      {completedLessons.includes(lesson._id) ? (
-                        <CheckCircleFilled
-                          className="text-primary ms-auto ml-2"
-                          style={{ marginTop: "13px" }}
-                        />
-                      ) : (
-                        <MinusCircleFilled
-                          className="text-danger ms-auto ml-2"
-                          style={{ marginTop: "13px" }}
-                        />
-                      )}
+                      <div style={{  display:"flex", flexDirection:"row", alignItems: "center",justifyContent:"space-between"}} className="p-2">
+                        {lesson.title.substring(0, 30)}
+                        {completedLessons.includes(lesson._id) ? (
+                          <CheckCircleFilled
+                            className="text-primary ml-10"
+                            // style={{ marginTop: "13px" }}
+                          />
+                        ) : (
+                          <MinusCircleFilled
+                            className="text-danger ml-2"
+                            // style={{ marginTop: "13px" }}
+                          />
+                        )}
+                      </div>
                     </Menu.Item>
                   </>
                 );

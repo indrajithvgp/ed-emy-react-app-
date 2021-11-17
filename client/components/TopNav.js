@@ -74,7 +74,7 @@ const TopNav = () => {
             </Link>
           </Item>
         )}
-        {user === null && (
+        {user == null && (
           <>
             <Item
               key="/login"

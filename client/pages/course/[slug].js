@@ -44,7 +44,7 @@ const SingleCourse = ({ course }) => {
       if(!user) router.push("/login");
       if(enrolled.status) return router.push(`/user/course/${enrolled.course.slug}`);
 
-      setLoading(true);
+      setLoading(true); 
       const {data} = await axios.post(`/api/free-enrollment/${course._id}`);
       toast.success(data.message);
       setLoading(false);

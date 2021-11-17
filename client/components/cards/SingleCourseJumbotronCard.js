@@ -3,7 +3,7 @@ import { List, Badge, Button } from "antd";
 import { LoadingOutlined, SafetyOutlined } from "@ant-design/icons";
 import ReactPlayer from "react-player";
 import { currencyFormatter } from "../../utils/helpers";
-const SingleCourseJumbotronCard = ({
+const SingleCourseJumbotronCard = ({ 
   name,
   description,
   instructor,
@@ -27,7 +27,7 @@ const SingleCourseJumbotronCard = ({
 }) => {
   // console.log(lessons, paid)
   return (
-    <div className="jumbotron bg-primary square p-4">
+    <div className="jumbotron bg-secondary p-4">
       <div className="row">
         <div className="col-md-8 p-4">
           <h1 className="text-light font-weight-bold">{name}</h1>
@@ -39,8 +39,16 @@ const SingleCourseJumbotronCard = ({
             style={{ backgroundColor: "#03a9f4" }}
             className="pb-4 mr-2"
           />
-          <p>Created by {instructor.name}</p>
-          <p>Last updated: {new Date(updatedAt).toLocaleString()}</p>
+          <p>
+            Created by{" "}
+            <span className="fw-bold fst-italic">{instructor.name}</span>
+          </p>
+          <p>
+            Last updated:{" "}
+            <span className="fw-bold fst-italic">
+              {new Date(updatedAt).toLocaleString()}
+            </span>
+          </p>
           <h4 className="text-light">
             {paid
               ? currencyFormatter({ amount: price, currency: "usd" })

@@ -307,7 +307,7 @@ export const checkEnrollment = async (req, res) => {
   for (let i = 0; i < length; i++) {
     ids.push(user.courses[i].toString());
   }
-  // if(ids.includes(courseId)){
+  // if(ids.includes(courseId)){ 
 
   // }
   res.json({
@@ -330,7 +330,7 @@ export const freeEnrollment = async (req, res) => {
       { new: true }
     ).exec();
     res.json({
-      message: "Congratulations! You have successfully enrolled",
+      message: "Congratulations! You have Successfully Enrolled",
       course,
     });
   } catch (err) {
